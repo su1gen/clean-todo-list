@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.CategoryResponse;
-import com.example.todolist.application.dto.CreateCategoryRequest;
+import com.example.todolist.application.dto.CreateCategoryDto;
 import com.example.todolist.application.dto.UpdateCategoryRequest;
 import com.example.todolist.application.usecase.*;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * REST контроллер для работы с категориями.
  * Все эндпоинты требуют аутентификации.
- *
+ * <p>
  * Эндпоинты:
  * - POST   /api/categories          - Создать категорию
  * - GET    /api/categories          - Получить все категории пользователя
@@ -28,21 +28,21 @@ import java.util.List;
 @RequestMapping(ApiPaths.CATEGORIES)
 public class CategoryController {
 
-    private final CreateCategoryUseCase createCategoryUseCase;
-    private final GetUserCategoriesUseCase getUserCategoriesUseCase;
-    private final GetCategoryUseCase getCategoryUseCase;
-    private final UpdateCategoryUseCase updateCategoryUseCase;
-    private final DeleteCategoryUseCase deleteCategoryUseCase;
+    private final CreateCategory createCategoryUseCase;
+    private final GetUserCategories getUserCategoriesUseCase;
+    private final GetCategory getCategoryUseCase;
+    private final UpdateCategory updateCategoryUseCase;
+    private final DeleteCategory deleteCategoryUseCase;
 
     public CategoryController(
-            CreateCategoryUseCase createCategoryUseCase,
-            GetUserCategoriesUseCase getUserCategoriesUseCase,
-            GetCategoryUseCase getCategoryUseCase,
-            UpdateCategoryUseCase updateCategoryUseCase,
-            DeleteCategoryUseCase deleteCategoryUseCase
+            CreateCategory createCategoryUseCase,
+            GetUserCategories getUserCategories,
+            GetCategory getCategoryUseCase,
+            UpdateCategory updateCategoryUseCase,
+            DeleteCategory deleteCategoryUseCase
     ) {
         this.createCategoryUseCase = createCategoryUseCase;
-        this.getUserCategoriesUseCase = getUserCategoriesUseCase;
+        this.getUserCategoriesUseCase = getUserCategories;
         this.getCategoryUseCase = getCategoryUseCase;
         this.updateCategoryUseCase = updateCategoryUseCase;
         this.deleteCategoryUseCase = deleteCategoryUseCase;
@@ -54,7 +54,7 @@ public class CategoryController {
      */
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(
-            @RequestBody CreateCategoryRequest request,
+            @RequestBody CreateCategoryDto request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         CategoryResponse response = createCategoryUseCase.execute(
@@ -67,7 +67,7 @@ public class CategoryController {
     /**
      * GET /api/categories
      * Получить все категории текущего пользователя (без удалённых)
-     *
+     * <p>
      * Query параметр: ?includeDeleted=true для получения всех категорий
      */
     @GetMapping

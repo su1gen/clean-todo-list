@@ -4,30 +4,29 @@ import com.example.todolist.domain.exception.CategoryAccessDeniedException;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.repository.CategoryRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 /**
  * Use Case: Удаление категории (soft delete).
- *
+ * <p>
  * Бизнес-правила:
  * 1. Категория должна существовать
  * 2. Пользователь может удалять только свои категории
  * 3. Soft delete (устанавливается deletedAt)
  */
-@Service
-@Transactional
-public class DeleteCategoryUseCase {
+@Named
+class DeleteCategoryUseCase implements DeleteCategory{
 
     private final CategoryRepository categoryRepository;
 
-    public DeleteCategoryUseCase(CategoryRepository categoryRepository) {
+     DeleteCategoryUseCase(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
     /**
      * Soft delete категории
      */
+    @Override
     public void execute(Long categoryId, Long userId) {
         // 1. Найти категорию (только не удалённые)
         Category category = categoryRepository.findByIdAndNotDeleted(categoryId)
@@ -48,6 +47,7 @@ public class DeleteCategoryUseCase {
     /**
      * Восстановить удалённую категорию
      */
+    @Override
     public void restore(Long categoryId, Long userId) {
         // 1. Найти категорию (включая удалённые)
         Category category = categoryRepository.findById(categoryId)

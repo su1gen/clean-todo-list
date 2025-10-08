@@ -4,25 +4,24 @@ import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.repository.TodoRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 /**
  * Use Case: Удаление Todo (soft delete).
  */
-@Service
-@Transactional
-public class DeleteTodoUseCase {
+@Named
+class DeleteTodoUseCase implements DeleteTodo {
 
     private final TodoRepository todoRepository;
 
-    public DeleteTodoUseCase(TodoRepository todoRepository) {
+    DeleteTodoUseCase(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
     }
 
     /**
      * Soft delete Todo
      */
+    @Override
     public void execute(Long todoId, Long userId) {
         // 1. Найти Todo
         Todo todo = todoRepository.findByIdAndNotDeleted(todoId)
@@ -43,6 +42,7 @@ public class DeleteTodoUseCase {
     /**
      * Восстановить удалённую Todo
      */
+    @Override
     public void restore(Long todoId, Long userId) {
         // 1. Найти Todo (включая удалённые)
         Todo todo = todoRepository.findById(todoId)

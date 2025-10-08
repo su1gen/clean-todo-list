@@ -3,31 +3,30 @@ package com.example.todolist.application.usecase;
 import com.example.todolist.application.dto.CategoryResponse;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.repository.CategoryRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Use Case: Получение всех категорий пользователя.
- *
+ * <p>
  * Бизнес-правило:
  * - Возвращаем только не удалённые категории
  */
-@Service
-@Transactional
-public class GetUserCategoriesUseCase {
+@Named
+class GetUserCategoriesUseCase implements GetUserCategories {
 
     private final CategoryRepository categoryRepository;
 
-    public GetUserCategoriesUseCase(CategoryRepository categoryRepository) {
+    GetUserCategoriesUseCase(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
     /**
      * Получить все категории пользователя (без удалённых)
      */
+    @Override
     public List<CategoryResponse> execute(Long userId) {
         List<Category> categories = categoryRepository.findByUserIdAndNotDeleted(userId);
 
@@ -39,6 +38,7 @@ public class GetUserCategoriesUseCase {
     /**
      * Получить все категории пользователя (включая удалённые)
      */
+    @Override
     public List<CategoryResponse> executeIncludingDeleted(Long userId) {
         List<Category> categories = categoryRepository.findByUserId(userId);
 
@@ -47,7 +47,8 @@ public class GetUserCategoriesUseCase {
                 .collect(Collectors.toList());
     }
 
-    private CategoryResponse mapToResponse(Category category) {
+    @Override
+    public CategoryResponse mapToResponse(Category category) {
         return new CategoryResponse(
                 category.getId(),
                 category.getTitle(),

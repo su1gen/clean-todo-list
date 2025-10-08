@@ -8,16 +8,15 @@ import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.TodoRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
-@Service
-@Transactional
-public class UpdateTodoUseCase  {
+@Named
+class UpdateTodoUseCase implements UpdateTodo{
+
     private final TodoRepository todoRepository;
     private final CategoryRepository categoryRepository;
 
-    public UpdateTodoUseCase(
+    UpdateTodoUseCase(
             TodoRepository todoRepository,
             CategoryRepository categoryRepository
     ) {
@@ -25,6 +24,7 @@ public class UpdateTodoUseCase  {
         this.categoryRepository = categoryRepository;
     }
 
+    @Override
     public TodoResponse execute(Long todoId, UpdateTodoRequest request, Long userId) {
         // 1. Найти Todo
         Todo todo = todoRepository.findByIdAndNotDeleted(todoId)
@@ -36,7 +36,7 @@ public class UpdateTodoUseCase  {
         }
 
         // 3. Если указана новая категория, проверить её
-        if (request.categoryId() != null) {
+        if (request.categoryId()!=null) {
             categoryRepository.findByIdAndNotDeleted(request.categoryId())
                     .filter(category -> category.belongsToUser(userId))
                     .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));

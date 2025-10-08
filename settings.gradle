@@ -2,3 +2,4 @@ rootProject.name = 'todo-list'
 
 
 include(":domain")
+include(":application")

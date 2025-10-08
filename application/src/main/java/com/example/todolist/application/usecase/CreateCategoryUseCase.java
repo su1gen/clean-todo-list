@@ -1,30 +1,28 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CategoryResponse;
-import com.example.todolist.application.dto.CreateCategoryRequest;
+import com.example.todolist.application.dto.CreateCategoryDto;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 /**
  * Use Case: Создание новой категории.
- *
+ * <p>
  * Бизнес-правила:
  * 1. Пользователь должен существовать
  * 2. Title не может быть пустым
  * 3. Категория привязывается к пользователю
  */
-@Service
-@Transactional
-public class CreateCategoryUseCase {
+@Named
+class CreateCategoryUseCase implements  CreateCategory{
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    public CreateCategoryUseCase(
+    CreateCategoryUseCase(
             CategoryRepository categoryRepository,
             UserRepository userRepository
     ) {
@@ -36,9 +34,10 @@ public class CreateCategoryUseCase {
      * Выполнить создание категории
      *
      * @param request данные категории
-     * @param userId ID текущего пользователя (из JWT)
+     * @param userId  ID текущего пользователя (из JWT)
      */
-    public CategoryResponse execute(CreateCategoryRequest request, Long userId) {
+    @Override
+    public CategoryResponse execute(CreateCategoryDto request, Long userId) {
         // 1. Проверить существование пользователя
         if (userRepository.findById(userId).isEmpty()) {
             throw new UserNotFoundException(userId);

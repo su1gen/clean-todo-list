@@ -1,6 +1,6 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.CreateTodoRequest;
+import com.example.todolist.application.dto.CreateTodoDto;
 import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
@@ -9,26 +9,24 @@ import com.example.todolist.domain.model.TodoStatus;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.TodoRepository;
 import com.example.todolist.domain.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 /**
  * Use Case: Создание новой задачи.
- *
+ * <p>
  * Бизнес-правила:
  * 1. Пользователь должен существовать
  * 2. Если указана категория, она должна существовать и принадлежать пользователю
  * 3. Title обязателен
  */
-@Service
-@Transactional
-public class CreateTodoUseCase {
+@Named
+class CreateTodoUseCase implements CreateTodo{
 
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    public CreateTodoUseCase(
+    CreateTodoUseCase(
             TodoRepository todoRepository,
             UserRepository userRepository,
             CategoryRepository categoryRepository
@@ -38,14 +36,15 @@ public class CreateTodoUseCase {
         this.categoryRepository = categoryRepository;
     }
 
-    public TodoResponse execute(CreateTodoRequest request, Long userId) {
+    @Override
+    public TodoResponse execute(CreateTodoDto request, Long userId) {
         // 1. Проверить существование пользователя
         if (userRepository.findById(userId).isEmpty()) {
             throw new UserNotFoundException(userId);
         }
 
         // 2. Если указана категория, проверить её существование и принадлежность пользователю
-        if (request.categoryId() != null) {
+        if (request.categoryId()!=null) {
             categoryRepository.findByIdAndNotDeleted(request.categoryId())
                     .filter(category -> category.belongsToUser(userId))
                     .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));

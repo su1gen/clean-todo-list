@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.UserResponse;
-import com.example.todolist.application.usecase.GetUserUseCase;
+import com.example.todolist.application.usecase.GetUser;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final GetUserUseCase getUserUseCase;
+    private final GetUser getUser;
 
-    public UserController(GetUserUseCase getUserUseCase) {
-        this.getUserUseCase = getUserUseCase;
+    public UserController(GetUser getUser) {
+        this.getUser = getUser;
     }
 
     /**
@@ -30,7 +30,7 @@ public class UserController {
     public ResponseEntity<UserResponse> getCurrentUser(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        UserResponse response = getUserUseCase.executeById(userDetails.getUserId());
+        UserResponse response = getUser.executeById(userDetails.getUserId());
         return ResponseEntity.ok(response);
     }
 
@@ -40,7 +40,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        UserResponse response = getUserUseCase.executeById(id);
+        UserResponse response = getUser.executeById(id);
         return ResponseEntity.ok(response);
     }
 
@@ -49,7 +49,7 @@ public class UserController {
      */
     @GetMapping("/by-email")
     public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
-        UserResponse response = getUserUseCase.executeByEmail(email);
+        UserResponse response = getUser.executeByEmail(email);
         return ResponseEntity.ok(response);
     }
 }

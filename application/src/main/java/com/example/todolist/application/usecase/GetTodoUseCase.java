@@ -5,23 +5,22 @@ import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.repository.TodoRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 
-@Service
-@Transactional
-public class GetTodoUseCase {
+@Named
+class GetTodoUseCase implements GetTodo {
 
     private final TodoRepository todoRepository;
 
-    public GetTodoUseCase(TodoRepository todoRepository) {
+    GetTodoUseCase(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
     }
 
     /**
      * Получить задачу по ID с проверкой прав доступа
      */
+    @Override
     public TodoResponse execute(Long todoId, Long userId) {
         // 1. Найти задачу (включая удалённые)
         Todo todo = todoRepository.findByIdAndNotDeleted(todoId)

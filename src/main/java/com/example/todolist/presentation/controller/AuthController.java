@@ -3,8 +3,8 @@ package com.example.todolist.presentation.controller;
 import com.example.todolist.application.dto.AuthResponse;
 import com.example.todolist.application.dto.LoginRequest;
 import com.example.todolist.application.dto.RegisterRequest;
-import com.example.todolist.application.usecase.LoginUserUseCase;
-import com.example.todolist.application.usecase.RegisterUserUseCase;
+import com.example.todolist.application.usecase.LoginUser;
+import com.example.todolist.application.usecase.RegisterUser;
 import com.example.todolist.infrastructure.security.jwt.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST контроллер для аутентификации.
- *
+ * <p>
  * Эндпоинты:
  * - POST /api/auth/register - регистрация
  * - POST /api/auth/login - логин
@@ -28,16 +28,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ApiPaths.AUTH)
 public class AuthController {
 
-    private final RegisterUserUseCase registerUserUseCase;
-    private final LoginUserUseCase loginUserUseCase;
+    private final RegisterUser registerUserUseCase;
+    private final LoginUser loginUserUseCase;
     private final JwtService jwtService;
 
     public AuthController(
-            RegisterUserUseCase registerUserUseCase,
-            LoginUserUseCase loginUserUseCase,
+            RegisterUser registerUser,
+            LoginUser loginUserUseCase,
             JwtService jwtService
     ) {
-        this.registerUserUseCase = registerUserUseCase;
+        this.registerUserUseCase = registerUser;
         this.loginUserUseCase = loginUserUseCase;
         this.jwtService = jwtService;
     }

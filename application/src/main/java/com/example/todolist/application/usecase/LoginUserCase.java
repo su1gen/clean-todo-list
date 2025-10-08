@@ -7,24 +7,22 @@ import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.User;
 import com.example.todolist.domain.repository.UserRepository;
 import com.example.todolist.domain.service.PasswordEncoder;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 /**
  * Use Case: Аутентификация пользователя.
- *
+ * <p>
  * Бизнес-правила:
  * 1. Пользователь должен существовать
  * 2. Пароль должен совпадать с хешем
  */
-@Service
-@Transactional
-public class LoginUserUseCase {
+@Named
+ class LoginUserCase implements LoginUser {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginUserUseCase(
+     LoginUserCase(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder
     ) {
@@ -32,6 +30,7 @@ public class LoginUserUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public AuthResponse execute(LoginRequest request) {
         // 1. Найти пользователя по email
         User user = userRepository.findByEmail(request.email())

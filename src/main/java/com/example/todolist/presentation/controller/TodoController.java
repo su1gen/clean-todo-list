@@ -1,6 +1,6 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.CreateTodoRequest;
+import com.example.todolist.application.dto.CreateTodoDto;
 import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.application.dto.UpdateTodoRequest;
 import com.example.todolist.application.usecase.*;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * REST контроллер для работы с Todo.
  * Все эндпоинты требуют аутентификации.
- *
+ * <p>
  * Эндпоинты:
  * - POST   /api/todos                  - Создать Todo
  * - GET    /api/todos                  - Получить все Todo пользователя
@@ -32,24 +32,24 @@ import java.util.List;
 @RequestMapping(ApiPaths.TODOS)
 public class TodoController {
 
-    private final CreateTodoUseCase createTodoUseCase;
-    private final GetUserTodosUseCase getUserTodosUseCase;
-    private final GetTodoUseCase getTodoUseCase;
-    private final UpdateTodoUseCase updateTodoUseCase;
-    private final DeleteTodoUseCase deleteTodoUseCase;
+    private final CreateTodo createTodoUseCase;
+    private final GetUserTodos getUserTodosUseCase;
+    private final GetTodo getTodoUseCase;
+    private final UpdateTodo updateTodoUseCase;
+    private final DeleteTodo deleteTodoUseCase;
 
     public TodoController(
-            CreateTodoUseCase createTodoUseCase,
-            GetUserTodosUseCase getUserTodosUseCase,
-            GetTodoUseCase getTodoUseCase,
-            UpdateTodoUseCase updateTodoUseCase,
-            DeleteTodoUseCase deleteTodoUseCase
+            CreateTodo createTodo,
+            GetUserTodos getUserTodos,
+            GetTodo getTodo,
+            UpdateTodo updateTodo,
+            DeleteTodo deleteTodo
     ) {
-        this.createTodoUseCase = createTodoUseCase;
-        this.getUserTodosUseCase = getUserTodosUseCase;
-        this.getTodoUseCase = getTodoUseCase;
-        this.updateTodoUseCase = updateTodoUseCase;
-        this.deleteTodoUseCase = deleteTodoUseCase;
+        this.createTodoUseCase = createTodo;
+        this.getUserTodosUseCase = getUserTodos;
+        this.getTodoUseCase = getTodo;
+        this.updateTodoUseCase = updateTodo;
+        this.deleteTodoUseCase = deleteTodo;
     }
 
     /**
@@ -58,7 +58,7 @@ public class TodoController {
      */
     @PostMapping
     public ResponseEntity<TodoResponse> createTodo(
-            @RequestBody CreateTodoRequest request,
+            @RequestBody CreateTodoDto request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         TodoResponse response = createTodoUseCase.execute(

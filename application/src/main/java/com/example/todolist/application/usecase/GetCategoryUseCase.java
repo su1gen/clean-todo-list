@@ -5,29 +5,28 @@ import com.example.todolist.domain.exception.CategoryAccessDeniedException;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.repository.CategoryRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 /**
  * Use Case: Получение категории по ID.
- *
+ * <p>
  * Бизнес-правила:
  * 1. Категория должна существовать
  * 2. Пользователь может видеть только свои категории
  */
-@Service
-@Transactional
-public class GetCategoryUseCase {
+@Named
+class GetCategoryUseCase implements GetCategory{
 
     private final CategoryRepository categoryRepository;
 
-    public GetCategoryUseCase(CategoryRepository categoryRepository) {
+     GetCategoryUseCase(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
     /**
      * Получить категорию по ID с проверкой прав доступа
      */
+    @Override
     public CategoryResponse execute(Long categoryId, Long userId) {
         // 1. Найти категорию (включая удалённые)
         Category category = categoryRepository.findById(categoryId)
@@ -45,6 +44,7 @@ public class GetCategoryUseCase {
     /**
      * Получить не удалённую категорию
      */
+    @Override
     public CategoryResponse executeNotDeleted(Long categoryId, Long userId) {
         Category category = categoryRepository.findByIdAndNotDeleted(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));

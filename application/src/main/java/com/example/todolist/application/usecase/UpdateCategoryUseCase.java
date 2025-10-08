@@ -6,27 +6,26 @@ import com.example.todolist.domain.exception.CategoryAccessDeniedException;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.repository.CategoryRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
 /**
  * Use Case: Обновление категории.
- *
+ * <p>
  * Бизнес-правила:
  * 1. Категория должна существовать
  * 2. Пользователь может изменять только свои категории
  * 3. Нельзя изменить удалённую категорию
  */
-@Service
-@Transactional
-public class UpdateCategoryUseCase {
+@Named
+ class UpdateCategoryUseCase implements UpdateCategory {
 
     private final CategoryRepository categoryRepository;
 
-    public UpdateCategoryUseCase(CategoryRepository categoryRepository) {
+     UpdateCategoryUseCase(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
+    @Override
     public CategoryResponse execute(Long categoryId, UpdateCategoryRequest request, Long userId) {
         // 1. Найти категорию
         Category category = categoryRepository.findByIdAndNotDeleted(categoryId)
