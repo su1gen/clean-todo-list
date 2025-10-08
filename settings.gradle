@@ -6,3 +6,4 @@ include(":application")
 
 include(":infrastructure:security")
 include(":infrastructure:persistence")
+include(":presentation")

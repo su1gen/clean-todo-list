@@ -8,7 +8,6 @@ import com.example.todolist.application.usecase.RegisterUser;
 import com.example.todolist.infrastructure.security.jwt.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +47,7 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
-            @RequestBody @Valid RegisterRequest request,
+            @RequestBody RegisterRequest request,
             HttpServletResponse response
     ) {
         // 1. Выполнить регистрацию через use case
@@ -73,7 +72,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @RequestBody @Valid LoginRequest request,
+            @RequestBody LoginRequest request,
             HttpServletResponse response
     ) {
         // 1. Выполнить аутентификацию через use case
