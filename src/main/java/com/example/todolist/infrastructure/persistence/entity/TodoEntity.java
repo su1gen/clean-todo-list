@@ -1,0 +1,129 @@
+package com.example.todolist.infrastructure.persistence.entity;
+
+import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.infrastructure.persistence.converter.TodoStatusConverter;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "todos")
+public class TodoEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 255, nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "category_id")
+    private Long categoryId;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Convert(converter = TodoStatusConverter.class)
+    private TodoStatus status;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    private LocalDateTime deletedAt;
+    private LocalDateTime plannedAt;
+
+
+    public TodoEntity() {}
+
+    public TodoEntity(
+            String title,
+            String description,
+            Long categoryId,
+            Long userId,
+            TodoStatus status,
+            LocalDateTime plannedAt
+    ) {
+        this.title = title;
+        this.description = description;
+        this.categoryId = categoryId;
+        this.userId = userId;
+        this.status = status;
+        this.plannedAt = plannedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public TodoStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TodoStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public LocalDateTime getPlannedAt() {
+        return plannedAt;
+    }
+
+    public void setPlannedAt(LocalDateTime plannedAt) {
+        this.plannedAt = plannedAt;
+    }
+}

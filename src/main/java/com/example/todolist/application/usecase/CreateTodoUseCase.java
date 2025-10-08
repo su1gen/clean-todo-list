@@ -1,0 +1,86 @@
+package com.example.todolist.application.usecase;
+
+import com.example.todolist.application.dto.CreateTodoRequest;
+import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.domain.exception.CategoryNotFoundException;
+import com.example.todolist.domain.exception.UserNotFoundException;
+import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.repository.CategoryRepository;
+import com.example.todolist.domain.repository.TodoRepository;
+import com.example.todolist.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+/**
+ * Use Case: Создание новой задачи.
+ *
+ * Бизнес-правила:
+ * 1. Пользователь должен существовать
+ * 2. Если указана категория, она должна существовать и принадлежать пользователю
+ * 3. Title обязателен
+ */
+@Service
+@Transactional
+public class CreateTodoUseCase {
+
+    private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+
+    public CreateTodoUseCase(
+            TodoRepository todoRepository,
+            UserRepository userRepository,
+            CategoryRepository categoryRepository
+    ) {
+        this.todoRepository = todoRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    public TodoResponse execute(CreateTodoRequest request, Long userId) {
+        // 1. Проверить существование пользователя
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
+
+        // 2. Если указана категория, проверить её существование и принадлежность пользователю
+        if (request.categoryId() != null) {
+            categoryRepository.findByIdAndNotDeleted(request.categoryId())
+                    .filter(category -> category.belongsToUser(userId))
+                    .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
+        }
+
+        // 3. Создать доменную модель (валидация внутри)
+        Todo todo = new Todo(
+                request.title(),
+                request.description(),
+                request.categoryId(),
+                userId,
+                TodoStatus.CREATED,
+                request.plannedAt()
+        );
+
+        // 4. Сохранить
+        Todo savedTodo = todoRepository.save(todo);
+
+        // 5. Вернуть ответ
+        return mapToResponse(savedTodo);
+    }
+
+    private TodoResponse mapToResponse(Todo todo) {
+        return new TodoResponse(
+                todo.getId(),
+                todo.getTitle(),
+                todo.getDescription(),
+                todo.getCategoryId(),
+                todo.getUserId(),
+                todo.getStatus().getUrlParam(),
+                todo.getStatus().getTitle(),
+                todo.getCreatedAt(),
+                todo.getPlannedAt(),
+                todo.isDeleted(),
+                todo.isOverdue()
+        );
+    }
+}
