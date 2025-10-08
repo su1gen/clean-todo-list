@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.example.todolist.domain'
+version = '0.0.1'
+description = 'Domain module'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

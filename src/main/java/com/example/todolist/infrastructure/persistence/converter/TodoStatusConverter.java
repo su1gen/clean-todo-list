@@ -14,6 +14,6 @@ public class TodoStatusConverter implements AttributeConverter<TodoStatus, Integ
 
     @Override
     public TodoStatus convertToEntityAttribute(Integer dbData) {
-        return TodoStatus.byId(dbData);
+        return TodoStatus.fromId(dbData);
     }
 }
