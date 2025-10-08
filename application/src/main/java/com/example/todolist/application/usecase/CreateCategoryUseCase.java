@@ -17,7 +17,7 @@ import jakarta.inject.Named;
  * 3. Категория привязывается к пользователю
  */
 @Named
-class CreateCategoryUseCase implements  CreateCategory{
+class CreateCategoryUseCase implements CreateCategory {
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;

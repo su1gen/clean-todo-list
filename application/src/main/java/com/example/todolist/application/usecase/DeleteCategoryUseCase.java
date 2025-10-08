@@ -15,7 +15,7 @@ import jakarta.inject.Named;
  * 3. Soft delete (устанавливается deletedAt)
  */
 @Named
-class DeleteCategoryUseCase implements DeleteCategory{
+class DeleteCategoryUseCase implements DeleteCategory {
 
     private final CategoryRepository categoryRepository;
 

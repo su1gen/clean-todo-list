@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Use Case: Получение списка Todo пользователя с различными фильтрами.
  */
 @Named
- class GetUserTodosUseCase implements GetUserTodos{
+ class GetUserTodosUseCase implements GetUserTodos {
 
     private final TodoRepository todoRepository;
 

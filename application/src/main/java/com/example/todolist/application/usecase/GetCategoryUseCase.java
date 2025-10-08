@@ -15,7 +15,7 @@ import jakarta.inject.Named;
  * 2. Пользователь может видеть только свои категории
  */
 @Named
-class GetCategoryUseCase implements GetCategory{
+class GetCategoryUseCase implements GetCategory {
 
     private final CategoryRepository categoryRepository;
 

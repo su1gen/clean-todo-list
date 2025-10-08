@@ -20,7 +20,7 @@ import jakarta.inject.Named;
  * 3. Title обязателен
  */
 @Named
-class CreateTodoUseCase implements CreateTodo{
+class CreateTodoUseCase implements CreateTodo {
 
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
