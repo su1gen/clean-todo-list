@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
  * Реализация доменного репозитория через JPA.
  */
 @Component
-public class CategoryRepositoryImpl implements CategoryRepository {
+ class CategoryRepositoryImpl implements CategoryRepository {
 
     private final JpaCategoryRepository jpaRepository;
     private final CategoryMapper mapper;
 
-    public CategoryRepositoryImpl(
+     CategoryRepositoryImpl(
             JpaCategoryRepository jpaRepository,
             CategoryMapper mapper
     ) {

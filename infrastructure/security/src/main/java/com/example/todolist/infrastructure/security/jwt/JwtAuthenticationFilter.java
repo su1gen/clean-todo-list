@@ -18,7 +18,7 @@ import java.io.IOException;
 
 /**
  * Фильтр для извлечения и валидации JWT из cookies.
- *
+ * <p>
  * Порядок работы:
  * 1. Извлекаем JWT из cookie
  * 2. Валидируем токен
@@ -50,9 +50,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = extractTokenFromCookie(request);
 
         // 2. Если токен есть и валиден
-        if (token != null && jwtService.validateToken(token)) {
+        if (token!=null && jwtService.validateToken(token)) {
             // 3. Проверяем, что пользователь еще не аутентифицирован
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (SecurityContextHolder.getContext().getAuthentication()==null) {
                 String email = jwtService.getEmailFromToken(token);
 
                 // 4. Загружаем UserDetails
@@ -84,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private String extractTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
+        if (cookies!=null) {
             for (Cookie cookie : cookies) {
                 if (jwtService.getCookieName().equals(cookie.getName())) {
                     return cookie.getValue();

@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
  * Это адаптер, который связывает бизнес-логику (domain) с технологией (JPA)
  */
 @Component
-public class UserRepositoryImpl implements UserRepository {
+ class UserRepositoryImpl implements UserRepository {
 
     private final JpaUserRepository jpaRepository;
     private final UserMapper mapper;
 
-    public UserRepositoryImpl(JpaUserRepository jpaRepository, UserMapper mapper) {
+     UserRepositoryImpl(JpaUserRepository jpaRepository, UserMapper mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }

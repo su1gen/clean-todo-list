@@ -3,3 +3,6 @@ rootProject.name = 'todo-list'
 
 include(":domain")
 include(":application")
+
+include(":infrastructure:security")
+include(":infrastructure:persistence")

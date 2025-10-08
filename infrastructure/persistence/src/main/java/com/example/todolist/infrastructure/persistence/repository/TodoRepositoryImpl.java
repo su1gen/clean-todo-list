@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
  * Реализация доменного репозитория через JPA.
  */
 @Component
-public class TodoRepositoryImpl implements TodoRepository {
+class TodoRepositoryImpl implements TodoRepository {
 
     private final JpaTodoRepository jpaRepository;
     private final TodoMapper mapper;
 
-    public TodoRepositoryImpl(JpaTodoRepository jpaRepository, TodoMapper mapper) {
+    TodoRepositoryImpl(JpaTodoRepository jpaRepository, TodoMapper mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }
