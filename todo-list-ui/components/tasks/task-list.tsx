@@ -1,4 +1,3 @@
-import {use} from "react"
 import TasksEmpty from "@/components/tasks/tasks-empty";
 import {Task} from "@/types";
 import TaskListItem from "@/components/tasks/task-list-item";
@@ -8,12 +7,10 @@ import PageDescription from "@/components/ui/page-description";
 type TaskListProps = {
   title: string;
   description: string;
-  tasksPromise: Promise<Task[]>;
+  tasks: Task[];
 }
 
-export default function TaskList({tasksPromise, title, description}: TaskListProps) {
-  const tasks = use(tasksPromise)
-
+export default function TaskList({tasks, title, description}: TaskListProps) {
   return <div className="p-8 animate-fadeIn">
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">

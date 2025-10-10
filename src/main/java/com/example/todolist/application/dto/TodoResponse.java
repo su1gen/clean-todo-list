@@ -7,7 +7,7 @@ public record TodoResponse(
         String title,
         String description,
         Long categoryId,
-        String status,
+        TodoStatusResponse status,
         LocalDateTime createdAt,
         LocalDateTime plannedAt
 ) {

@@ -47,7 +47,7 @@ export default function TaskForm({task}: TaskFormProps) {
     defaultValues: {
       title: task?.title || "",
       description: task?.description || "",
-      categoryId: task?.category?.id?.toString() || null,
+      categoryId: task?.categoryId?.toString() || null,
       statusId: task?.status?.id?.toString() || "3",
       plannedAt: task?.plannedAt || undefined,
     },

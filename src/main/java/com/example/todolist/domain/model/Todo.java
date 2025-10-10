@@ -77,9 +77,9 @@ public class Todo {
     /**
      * Обновить основные данные задачи
      */
-    public Todo update(String newTitle, String newDescription, Long newCategoryId, LocalDateTime newPlannedAt) {
+    public Todo update(String newTitle, String newDescription, Long newCategoryId, TodoStatus newTodoStatus, LocalDateTime newPlannedAt) {
         return new Todo(this.id, newTitle, newDescription, newCategoryId, this.userId,
-                this.status, this.createdAt, this.deletedAt, newPlannedAt);
+                newTodoStatus, this.createdAt, this.deletedAt, newPlannedAt);
     }
 
     /**

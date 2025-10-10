@@ -3,6 +3,11 @@ export type Category = {
     title: string;
 }
 
+export type CategoryWithTodos = {
+    title: string;
+    todos: Task[]
+}
+
 export type Status = {
     id: number;
     title: string;
@@ -12,7 +17,7 @@ export type Task = {
     id: number,
     title: string,
     description: string,
-    category: Category,
+    categoryId: number,
     status: Status,
     plannedAt: Date | null,
 }

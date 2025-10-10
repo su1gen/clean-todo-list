@@ -2,6 +2,7 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CreateTodoDto;
 import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.dto.TodoStatusResponse;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Todo;
@@ -78,7 +79,10 @@ class CreateTodoUseCase implements CreateTodo {
                 todo.getTitle(),
                 todo.getDescription(),
                 todo.getCategoryId(),
-                todo.getStatus().getTitle(),
+                new TodoStatusResponse(
+                        todo.getStatus().getId(),
+                        todo.getStatus().getTitle()
+                ),
                 todo.getCreatedAt(),
                 todo.getPlannedAt()
         );

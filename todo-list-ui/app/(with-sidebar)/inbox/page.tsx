@@ -4,7 +4,7 @@ import TaskList from "@/components/tasks/task-list";
 import {routes} from "@/lib/routes";
 import {Task} from "@/types";
 import apiFront from "@/lib/api-front";
-import {Suspense, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import Loader from "@/components/ui/loader";
 
 const fetchInboxTasks = async (): Promise<Task[]> => {
@@ -13,21 +13,25 @@ const fetchInboxTasks = async (): Promise<Task[]> => {
 }
 
 export default function Inbox() {
-  const [tasksPromise, setTasksPromise] = useState<Promise<Task[]> | null>(null)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setTasksPromise(fetchInboxTasks)
+    fetchInboxTasks()
+      .then(response => {
+        setTasks(response)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
-  if (!tasksPromise) return null
 
-  return (
-    <Suspense fallback={<Loader/>}>
-      <TaskList
-        tasksPromise={tasksPromise}
-        title="Inbox"
-        description="Входящие задачи"
-      />
-    </Suspense>
-  )
+  if (loading) return <Loader/>
+
+  return <TaskList
+    tasks={tasks}
+    title="Inbox"
+    description="Входящие задачи"
+  />
 }

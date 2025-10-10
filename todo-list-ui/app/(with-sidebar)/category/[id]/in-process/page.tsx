@@ -2,15 +2,17 @@
 
 import TaskList from "@/components/tasks/task-list";
 import {routes} from "@/lib/routes";
-import {Task} from "@/types";
+import {CategoryWithTodos} from "@/types";
 import {notFound, useParams} from "next/navigation";
-import {Suspense, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import apiFront from "@/lib/api-front";
 import Loader from "@/components/ui/loader";
 
 
 export default function InProcess() {
-    const [tasksPromise, setTasksPromise] = useState<Promise<Task[]> | null>(null)
+    const [categoryWithTodos, setCategoryWithTodos] = useState<CategoryWithTodos | null>(null)
+    const [loading, setLoading] = useState(true)
+
     const { id } = useParams<{id: string}>();
     const categoryId = Number.parseInt(id);
 
@@ -18,22 +20,27 @@ export default function InProcess() {
         notFound()
     }
 
+    const fetchCategoryTasks = async (): Promise<CategoryWithTodos> => {
+        const response = await apiFront.get(routes.todos.categoryTodosInProcess(categoryId))
+        return response.data
+    }
+
     useEffect(() => {
-        const fetchCategoryTasks = async (): Promise<Task[]> => {
-            const response = await apiFront.get(routes.todos.categoryTodosInProcess(categoryId))
-            return response.data
-        }
+        fetchCategoryTasks()
+          .then(response => {
+              setCategoryWithTodos(response)
+          })
+          .finally(() => {
+              setLoading(false)
+          })
+    }, [])
 
-        setTasksPromise(fetchCategoryTasks)
-    }, [categoryId])
 
-    if (!tasksPromise) return null
+    if (loading) return <Loader/>
 
-    return <Suspense fallback={<Loader/>}>
-        <TaskList
-          tasksPromise={tasksPromise}
-          title="Категория"
-          description="Задачи в работе категории"
-        />
-    </Suspense>
+    return <TaskList
+      tasks={categoryWithTodos?.todos || []}
+      title={(categoryWithTodos?.title + " - " || "") + "In Process" }
+      description={categoryWithTodos?.title ? `Задачи в работе категории ${categoryWithTodos.title}` : "Задачи в работе категории"}
+    />
 }

@@ -1,11 +1,13 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.dto.TodoStatusResponse;
 import com.example.todolist.application.dto.UpdateTodoDto;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.TodoStatus;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.TodoRepository;
 import org.springframework.stereotype.Component;
@@ -47,6 +49,7 @@ class UpdateTodoUseCase implements UpdateTodo{
                 request.title(),
                 request.description(),
                 request.categoryId(),
+                TodoStatus.fromId(request.statusId()),
                 request.plannedAt()
         );
 
@@ -63,7 +66,10 @@ class UpdateTodoUseCase implements UpdateTodo{
                 todo.getTitle(),
                 todo.getDescription(),
                 todo.getCategoryId(),
-                todo.getStatus().getTitle(),
+                new TodoStatusResponse(
+                        todo.getStatus().getId(),
+                        todo.getStatus().getTitle()
+                ),
                 todo.getCreatedAt(),
                 todo.getPlannedAt()
         );

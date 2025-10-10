@@ -13,21 +13,27 @@ const fetchTodayTasks = async (): Promise<Task[]> => {
 }
 
 export default function Today() {
-  const [tasksPromise, setTasksPromise] = useState<Promise<Task[]> | null>(null)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setTasksPromise(fetchTodayTasks)
+    fetchTodayTasks()
+      .then(response => {
+        setTasks(response)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
-  if (!tasksPromise) return null
+
+  if (loading) return <Loader/>
 
   return (
-    <Suspense fallback={<Loader/>}>
-      <TaskList
-        tasksPromise={tasksPromise}
-        title="Today"
-        description="Задачи на сегодня"
-      />
-    </Suspense>
+    <TaskList
+      tasks={tasks}
+      title="Today"
+      description="Задачи на сегодня"
+    />
   )
 }

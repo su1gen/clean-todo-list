@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Реализация доменного репозитория через JPA.
@@ -44,12 +43,6 @@ public class CategoryRepositoryImpl implements CategoryRepository {
                 .toList();
     }
 
-//    @Override
-//    public Optional<Category> findById(Long id) {
-//        return jpaRepository.findById(id)
-//                .map(mapper::toDomain);
-//    }
-//
     @Override
     public Optional<Category> findByIdAndNotDeleted(Long id) {
         return jpaRepository.findByIdAndDeletedAtIsNull(id)
@@ -63,28 +56,4 @@ public class CategoryRepositoryImpl implements CategoryRepository {
                 .map(mapper::toDomain)
                 .toList();
     }
-//
-//    @Override
-//    public List<Category> findByUserIdAndNotDeleted(Long userId) {
-//        return jpaRepository.findByUserIdAndDeletedAtIsNull(userId).stream()
-//                .map(mapper::toDomain)
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public List<Category> findByUserId(Long userId) {
-//        return jpaRepository.findByUserId(userId).stream()
-//                .map(mapper::toDomain)
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public boolean existsById(Long id) {
-//        return jpaRepository.existsById(id);
-//    }
-//
-//    @Override
-//    public void deleteById(Long id) {
-//        jpaRepository.deleteById(id);
-//    }
 }
