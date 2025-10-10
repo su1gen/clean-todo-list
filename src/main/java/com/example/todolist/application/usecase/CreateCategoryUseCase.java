@@ -1,30 +1,30 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CategoryResponse;
-import com.example.todolist.application.dto.CreateCategoryRequest;
+import com.example.todolist.application.dto.CreateCategoryDto;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 /**
  * Use Case: Создание новой категории.
- *
+ * <p>
  * Бизнес-правила:
  * 1. Пользователь должен существовать
  * 2. Title не может быть пустым
  * 3. Категория привязывается к пользователю
  */
-@Service
-@Transactional
-public class CreateCategoryUseCase {
+@Component
+class CreateCategoryUseCase implements CreateCategory {
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    public CreateCategoryUseCase(
+    CreateCategoryUseCase(
             CategoryRepository categoryRepository,
             UserRepository userRepository
     ) {
@@ -36,16 +36,17 @@ public class CreateCategoryUseCase {
      * Выполнить создание категории
      *
      * @param request данные категории
-     * @param userId ID текущего пользователя (из JWT)
+     * @param userId  ID текущего пользователя (из JWT)
      */
-    public CategoryResponse execute(CreateCategoryRequest request, Long userId) {
+    @Override
+    public CategoryResponse execute(CreateCategoryDto request, Long userId) {
         // 1. Проверить существование пользователя
         if (userRepository.findById(userId).isEmpty()) {
             throw new UserNotFoundException(userId);
         }
 
         // 2. Создать доменную модель (валидация внутри конструктора)
-        Category category = new Category(request.title(), userId);
+        Category category = new Category(null, request.title(), userId, LocalDateTime.now(), null);
 
         // 3. Сохранить
         Category savedCategory = categoryRepository.save(category);
@@ -57,10 +58,7 @@ public class CreateCategoryUseCase {
     private CategoryResponse mapToResponse(Category category) {
         return new CategoryResponse(
                 category.getId(),
-                category.getTitle(),
-                category.getUserId(),
-                category.getCreatedAt(),
-                category.isDeleted()
+                category.getTitle()
         );
     }
 }

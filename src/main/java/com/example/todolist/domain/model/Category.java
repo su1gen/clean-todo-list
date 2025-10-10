@@ -19,15 +19,6 @@ public class Category {
     private final LocalDateTime createdAt;
     private final LocalDateTime deletedAt;
 
-    // Конструктор для создания новой категории
-    public Category(String title, Long userId) {
-        this.id = null;
-        this.title = validateTitle(title);
-        this.userId = validateUserId(userId);
-        this.createdAt = LocalDateTime.now();
-        this.deletedAt = null;
-    }
-
     // Полный конструктор (для восстановления из БД)
     public Category(Long id, String title, Long userId, LocalDateTime createdAt, LocalDateTime deletedAt) {
         this.id = id;

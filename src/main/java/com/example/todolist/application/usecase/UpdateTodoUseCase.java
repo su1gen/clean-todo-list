@@ -1,23 +1,22 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoResponse;
-import com.example.todolist.application.dto.UpdateTodoRequest;
+import com.example.todolist.application.dto.UpdateTodoDto;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.TodoRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-@Transactional
-public class UpdateTodoUseCase  {
+@Component
+class UpdateTodoUseCase implements UpdateTodo{
+
     private final TodoRepository todoRepository;
     private final CategoryRepository categoryRepository;
 
-    public UpdateTodoUseCase(
+    UpdateTodoUseCase(
             TodoRepository todoRepository,
             CategoryRepository categoryRepository
     ) {
@@ -25,7 +24,8 @@ public class UpdateTodoUseCase  {
         this.categoryRepository = categoryRepository;
     }
 
-    public TodoResponse execute(Long todoId, UpdateTodoRequest request, Long userId) {
+    @Override
+    public TodoResponse execute(Long todoId, UpdateTodoDto request, Long userId) {
         // 1. Найти Todo
         Todo todo = todoRepository.findByIdAndNotDeleted(todoId)
                 .orElseThrow(() -> new TodoNotFoundException(todoId));
@@ -36,7 +36,7 @@ public class UpdateTodoUseCase  {
         }
 
         // 3. Если указана новая категория, проверить её
-        if (request.categoryId() != null) {
+        if (request.categoryId()!=null) {
             categoryRepository.findByIdAndNotDeleted(request.categoryId())
                     .filter(category -> category.belongsToUser(userId))
                     .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
@@ -63,13 +63,9 @@ public class UpdateTodoUseCase  {
                 todo.getTitle(),
                 todo.getDescription(),
                 todo.getCategoryId(),
-                todo.getUserId(),
-                todo.getStatus().getUrlParam(),
                 todo.getStatus().getTitle(),
                 todo.getCreatedAt(),
-                todo.getPlannedAt(),
-                todo.isDeleted(),
-                todo.isOverdue()
+                todo.getPlannedAt()
         );
     }
 }

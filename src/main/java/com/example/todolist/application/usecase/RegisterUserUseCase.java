@@ -6,25 +6,25 @@ import com.example.todolist.domain.exception.UserAlreadyExistsException;
 import com.example.todolist.domain.model.User;
 import com.example.todolist.domain.repository.UserRepository;
 import com.example.todolist.domain.service.PasswordEncoder;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 /**
  * Use Case: Регистрация нового пользователя.
- *
+ * <p>
  * Бизнес-правила:
  * 1. Email должен быть уникальным
  * 2. Пароль должен быть >= 6 символов
  * 3. Пароль должен быть зашифрован перед сохранением
  */
-@Service
-@Transactional
-public class RegisterUserUseCase {
+@Component
+class RegisterUserUseCase implements RegisterUser {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public RegisterUserUseCase(
+    RegisterUserUseCase(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder
     ) {
@@ -32,6 +32,7 @@ public class RegisterUserUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public AuthResponse execute(RegisterRequest request) {
         // 1. Проверка уникальности email
         if (userRepository.existsByEmail(request.email())) {
@@ -42,7 +43,7 @@ public class RegisterUserUseCase {
         String hashedPassword = passwordEncoder.encode(request.password());
 
         // 3. Создание доменной модели
-        User user = new User(request.email(), hashedPassword);
+        User user = new User(null, request.email(), hashedPassword, LocalDateTime.now());
 
         // 4. Сохранение
         User savedUser = userRepository.save(user);

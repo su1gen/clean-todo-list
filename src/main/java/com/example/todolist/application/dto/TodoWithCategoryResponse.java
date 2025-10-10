@@ -2,12 +2,12 @@ package com.example.todolist.application.dto;
 
 import java.time.LocalDateTime;
 
-public record TodoResponse(
+public record TodoWithCategoryResponse(
         Long id,
         String title,
         String description,
-        Long categoryId,
-        String status,
+        CategoryResponse category,
+        String statusTitle,
         LocalDateTime createdAt,
         LocalDateTime plannedAt
 ) {

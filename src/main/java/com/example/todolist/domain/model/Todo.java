@@ -26,25 +26,6 @@ public class Todo {
     private final LocalDateTime plannedAt;
 
     public Todo(
-            String title,
-            String description,
-            Long categoryId,
-            Long userId,
-            TodoStatus status,
-            LocalDateTime plannedAt
-    ) {
-        this.id = null;
-        this.title = title;
-        this.description = description;
-        this.categoryId = categoryId;
-        this.userId = userId;
-        this.status = status;
-        this.createdAt = LocalDateTime.now();
-        this.deletedAt = null;
-        this.plannedAt = plannedAt;
-    }
-
-    public Todo(
             Long id,
             String title,
             String description,

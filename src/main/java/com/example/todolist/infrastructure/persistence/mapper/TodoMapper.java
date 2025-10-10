@@ -1,8 +1,6 @@
 package com.example.todolist.infrastructure.persistence.mapper;
 
-import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.model.Todo;
-import com.example.todolist.infrastructure.persistence.entity.CategoryEntity;
 import com.example.todolist.infrastructure.persistence.entity.TodoEntity;
 import org.springframework.stereotype.Component;
 

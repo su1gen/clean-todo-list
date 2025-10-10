@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
  * Это адаптер, который связывает бизнес-логику (domain) с технологией (JPA)
  */
 @Component
-public class UserRepositoryImpl implements UserRepository {
+ class UserRepositoryImpl implements UserRepository {
 
     private final JpaUserRepository jpaRepository;
     private final UserMapper mapper;
 
-    public UserRepositoryImpl(JpaUserRepository jpaRepository, UserMapper mapper) {
+     UserRepositoryImpl(JpaUserRepository jpaRepository, UserMapper mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }
@@ -53,20 +53,5 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean existsByEmail(String email) {
         return jpaRepository.existsByEmail(email);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return jpaRepository.findAll()
-                .stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void delete(User user) {
-        if (user.getId() != null) {
-            jpaRepository.deleteById(user.getId());
-        }
     }
 }

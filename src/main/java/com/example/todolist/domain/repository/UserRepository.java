@@ -37,14 +37,4 @@ public interface UserRepository {
      * Проверить существование по email
      */
     boolean existsByEmail(String email);
-
-    /**
-     * Получить всех пользователей
-     */
-    List<User> findAll();
-
-    /**
-     * Удалить пользователя
-     */
-    void delete(User user);
 }

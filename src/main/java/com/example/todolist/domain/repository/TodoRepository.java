@@ -14,47 +14,60 @@ public interface TodoRepository {
     Todo save(Todo todo);
 
     /**
-     * Найти Todo по ID (включая удалённые)
-     */
-    Optional<Todo> findById(Long id);
-
-    /**
      * Найти Todo по ID только если не удалена
      */
     Optional<Todo> findByIdAndNotDeleted(Long id);
 
     /**
-     * Получить все Todo пользователя (без удалённых)
+     * Найти Today Todo
      */
-    List<Todo> findByUserIdAndNotDeleted(Long userId);
+    List<Todo> findByUserIdAndDeletedAtIsNullAndPlannedAtBetweenOrderByIdDesc(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
 
     /**
-     * Получить Todo пользователя с фильтрацией по статусу
+     * Найти Todo по статусу
      */
-    List<Todo> findByUserIdAndStatusAndNotDeleted(Long userId, TodoStatus status);
+    List<Todo> findByUserIdAndDeletedAtIsNullAndStatusOrderByIdDesc(Long userId, TodoStatus todoStatus);
 
-    /**
-     * Получить Todo пользователя по категории
-     */
-    List<Todo> findByUserIdAndCategoryIdAndNotDeleted(Long userId, Long categoryId);
+//    /**
+//     * Найти Todo по ID (включая удалённые)
+//     */
+//    Optional<Todo> findById(Long id);
+//
 
-    /**
-     * Получить просроченные Todo пользователя
-     */
-    List<Todo> findOverdueTodosByUserId(Long userId, LocalDateTime now);
-
-    /**
-     * Получить запланированные на сегодня Todo
-     */
-    List<Todo> findTodayTodosByUserId(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay);
-
-    /**
-     * Проверить существование Todo по ID
-     */
-    boolean existsById(Long id);
-
-    /**
-     * Физическое удаление Todo
-     */
-    void deleteById(Long id);
+//
+//    /**
+//     * Получить все Todo пользователя (без удалённых)
+//     */
+//    List<Todo> findByUserIdAndNotDeleted(Long userId);
+//
+//    /**
+//     * Получить Todo пользователя с фильтрацией по статусу
+//     */
+//    List<Todo> findByUserIdAndStatusAndNotDeleted(Long userId, TodoStatus status);
+//
+//    /**
+//     * Получить Todo пользователя по категории
+//     */
+//    List<Todo> findByUserIdAndCategoryIdAndNotDeleted(Long userId, Long categoryId);
+//
+//    /**
+//     * Получить просроченные Todo пользователя
+//     */
+//    List<Todo> findOverdueTodosByUserId(Long userId, LocalDateTime now);
+//
+//    /**
+//     * Получить запланированные на сегодня Todo
+//     */
+//    List<Todo> findTodayTodosByUserId(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+//
+//    /**
+//     * Проверить существование Todo по ID
+//     */
+//    boolean existsById(Long id);
+//
+//    /**
+//     * Физическое удаление Todo
+//     */
+//    void deleteById(Long id);
 }

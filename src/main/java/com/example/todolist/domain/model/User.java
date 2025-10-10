@@ -20,14 +20,6 @@ public class User {
     private final String password; // В идеале это должен быть Value Object
     private final LocalDateTime createdAt;
 
-    // Конструктор для создания нового пользователя (без id)
-    public User(String email, String password) {
-        this.id = null;
-        this.email = validateEmail(email);
-        this.password = validatePassword(password);
-        this.createdAt = LocalDateTime.now();
-    }
-
     // Полный конструктор (для восстановления из БД)
     public User(Long id, String email, String password, LocalDateTime createdAt) {
         this.id = id;

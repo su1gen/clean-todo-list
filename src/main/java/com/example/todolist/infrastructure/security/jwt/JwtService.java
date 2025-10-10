@@ -38,14 +38,13 @@ public class JwtService {
     /**
      * Генерация JWT токена для пользователя
      */
-    public String generateToken(String email, Long userId) {
+    public String generateToken(String username) {
         Instant now = Instant.now();
         Date issued = Date.from(now);
         Date expiry = Date.from(now.plusMillis(expirationMs));
 
         return Jwts.builder()
-                .subject(email) // Subject - это email
-                .claim("userId", userId) // Добавляем userId в claims
+                .subject(username)
                 .issuedAt(issued)
                 .expiration(expiry)
                 .signWith(key)

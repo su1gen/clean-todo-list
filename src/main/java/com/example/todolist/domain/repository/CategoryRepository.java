@@ -4,6 +4,7 @@ import com.example.todolist.domain.model.Category;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Порт (интерфейс) для работы с хранилищем категорий.
@@ -17,9 +18,9 @@ public interface CategoryRepository {
     Category save(Category category);
 
     /**
-     * Найти категорию по ID (включая удалённые)
+     * Получить все категории пользователя (без удалённых)
      */
-    Optional<Category> findById(Long id);
+    List<Category> findByUserIdAndNotDeletedWithDescOrder(Long userId);
 
     /**
      * Найти категорию по ID только если не удалена
@@ -27,22 +28,32 @@ public interface CategoryRepository {
     Optional<Category> findByIdAndNotDeleted(Long id);
 
     /**
-     * Получить все категории пользователя (без удалённых)
+     * Найти категорию по ID только если не удалена
      */
-    List<Category> findByUserIdAndNotDeleted(Long userId);
 
-    /**
-     * Получить все категории пользователя (включая удалённые)
-     */
-    List<Category> findByUserId(Long userId);
+    List<Category> findByIdsAndDeletedAtIsNull(Set<Long> ids);
 
-    /**
-     * Проверить существование категории по ID
-     */
-    boolean existsById(Long id);
+//    /**
+//     * Найти категорию по ID (включая удалённые)
+//     */
+//    Optional<Category> findById(Long id);
+//
 
-    /**
-     * Физическое удаление категории (для тестов или очистки)
-     */
-    void deleteById(Long id);
+//
+
+//
+//    /**
+//     * Получить все категории пользователя (включая удалённые)
+//     */
+//    List<Category> findByUserId(Long userId);
+//
+//    /**
+//     * Проверить существование категории по ID
+//     */
+//    boolean existsById(Long id);
+//
+//    /**
+//     * Физическое удаление категории (для тестов или очистки)
+//     */
+//    void deleteById(Long id);
 }

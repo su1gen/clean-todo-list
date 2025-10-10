@@ -7,6 +7,7 @@ import com.example.todolist.infrastructure.persistence.entity.TodoEntity;
 import com.example.todolist.infrastructure.persistence.mapper.TodoMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,64 +36,86 @@ public class TodoRepositoryImpl implements TodoRepository {
     }
 
     @Override
-    public Optional<Todo> findById(Long id) {
-        return jpaRepository.findById(id)
-                .map(mapper::toDomain);
-    }
-
-    @Override
     public Optional<Todo> findByIdAndNotDeleted(Long id) {
         return jpaRepository.findByIdAndDeletedAtIsNull(id)
                 .map(mapper::toDomain);
     }
 
     @Override
-    public List<Todo> findByUserIdAndNotDeleted(Long userId) {
-        return jpaRepository.findByUserIdAndDeletedAtIsNull(userId).stream()
+    public List<Todo> findByUserIdAndDeletedAtIsNullAndPlannedAtBetweenOrderByIdDesc(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        List<TodoEntity> todayTodos = jpaRepository.findByDeletedAtIsNullAndPlannedAtBetweenOrderByIdDesc(userId, startOfDay, endOfDay);
+
+        return todayTodos
+                .stream()
                 .map(mapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
-    public List<Todo> findByUserIdAndStatusAndNotDeleted(Long userId, TodoStatus status) {
-        return jpaRepository.findByUserIdAndStatusAndDeletedAtIsNull(userId, status).stream()
+    public List<Todo> findByUserIdAndDeletedAtIsNullAndStatusOrderByIdDesc(Long userId, TodoStatus todoStatus) {
+        List<TodoEntity> todayTodos = jpaRepository.findByDeletedAtIsNullAndStatusOrderByIdDesc(userId, todoStatus);
+
+        return todayTodos
+                .stream()
                 .map(mapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    @Override
-    public List<Todo> findByUserIdAndCategoryIdAndNotDeleted(Long userId, Long categoryId) {
-        return jpaRepository.findByUserIdAndCategoryIdAndDeletedAtIsNull(userId, categoryId).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public Optional<Todo> findById(Long id) {
+//        return jpaRepository.findById(id)
+//                .map(mapper::toDomain);
+//    }
+//
 
-    @Override
-    public List<Todo> findOverdueTodosByUserId(Long userId, LocalDateTime now) {
-        return jpaRepository.findOverdueTodosByUserId(
-                        userId,
-                        now,
-                        TodoStatus.FINISHED,
-                        TodoStatus.NOT_RELEVANT
-                ).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Todo> findTodayTodosByUserId(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay) {
-        return jpaRepository.findTodayTodosByUserId(userId, startOfDay, endOfDay).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return jpaRepository.existsById(id);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
-    }
+//
+//    @Override
+//    public List<Todo> findByUserIdAndNotDeleted(Long userId) {
+//        return jpaRepository.findByUserIdAndDeletedAtIsNull(userId).stream()
+//                .map(mapper::toDomain)
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public List<Todo> findByUserIdAndStatusAndNotDeleted(Long userId, TodoStatus status) {
+//        return jpaRepository.findByUserIdAndStatusAndDeletedAtIsNull(userId, status).stream()
+//                .map(mapper::toDomain)
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public List<Todo> findByUserIdAndCategoryIdAndNotDeleted(Long userId, Long categoryId) {
+//        return jpaRepository.findByUserIdAndCategoryIdAndDeletedAtIsNull(userId, categoryId).stream()
+//                .map(mapper::toDomain)
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public List<Todo> findOverdueTodosByUserId(Long userId, LocalDateTime now) {
+//        return jpaRepository.findOverdueTodosByUserId(
+//                        userId,
+//                        now,
+//                        TodoStatus.FINISHED,
+//                        TodoStatus.NOT_RELEVANT
+//                ).stream()
+//                .map(mapper::toDomain)
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public List<Todo> findTodayTodosByUserId(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay) {
+//        return jpaRepository.findTodayTodosByUserId(userId, startOfDay, endOfDay).stream()
+//                .map(mapper::toDomain)
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public boolean existsById(Long id) {
+//        return jpaRepository.existsById(id);
+//    }
+//
+//    @Override
+//    public void deleteById(Long id) {
+//        jpaRepository.deleteById(id);
+//    }
 }

@@ -7,11 +7,18 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Spring Data JPA репозиторий для CategoryEntity.
  */
 public interface JpaCategoryRepository extends JpaRepository<CategoryEntity, Long> {
+
+    /**
+     * Найти категории по ID пользователя
+     */
+    @Query("SELECT c FROM CategoryEntity c WHERE c.userId = :userId AND c.deletedAt IS NULL ORDER BY c.id DESC ")
+    List<CategoryEntity> findByUserIdAndDeletedAtIsNullOrderByIdDesc(@Param("userId") Long userId);
 
     /**
      * Найти не удалённую категорию по ID
@@ -20,14 +27,20 @@ public interface JpaCategoryRepository extends JpaRepository<CategoryEntity, Lon
     Optional<CategoryEntity> findByIdAndDeletedAtIsNull(@Param("id") Long id);
 
     /**
-     * Найти все категории пользователя (без удалённых)
+     * Найти не удалённые категории по ID
      */
-    @Query("SELECT c FROM CategoryEntity c WHERE c.userId = :userId AND c.deletedAt IS NULL ORDER BY c.createdAt DESC")
-    List<CategoryEntity> findByUserIdAndDeletedAtIsNull(@Param("userId") Long userId);
-
-    /**
-     * Найти все категории пользователя (включая удалённые)
-     */
-    @Query("SELECT c FROM CategoryEntity c WHERE c.userId = :userId ORDER BY c.createdAt DESC")
-    List<CategoryEntity> findByUserId(@Param("userId") Long userId);
+    @Query("SELECT c FROM CategoryEntity c WHERE c.id IN :ids AND c.deletedAt IS NULL")
+    List<CategoryEntity> findByIdsAndDeletedAtIsNull(@Param("ids") Set<Long> ids);
+//
+//    /**
+//     * Найти все категории пользователя (без удалённых)
+//     */
+//    @Query("SELECT c FROM CategoryEntity c WHERE c.userId = :userId AND c.deletedAt IS NULL ORDER BY c.createdAt DESC")
+//    List<CategoryEntity> findByUserIdAndDeletedAtIsNull(@Param("userId") Long userId);
+//
+//    /**
+//     * Найти все категории пользователя (включая удалённые)
+//     */
+//    @Query("SELECT c FROM CategoryEntity c WHERE c.userId = :userId ORDER BY c.createdAt DESC")
+//    List<CategoryEntity> findByUserId(@Param("userId") Long userId);
 }
