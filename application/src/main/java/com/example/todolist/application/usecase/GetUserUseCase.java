@@ -1,9 +1,9 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.UserResponse;
+import com.example.todolist.application.outport.UserRepository;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.User;
-import com.example.todolist.domain.repository.UserRepository;
 import jakarta.inject.Named;
 
 @Named

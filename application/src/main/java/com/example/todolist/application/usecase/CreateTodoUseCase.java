@@ -2,13 +2,13 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CreateTodoDto;
 import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.outport.CategoryRepository;
+import com.example.todolist.application.outport.TodoRepository;
+import com.example.todolist.application.outport.UserRepository;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.domain.repository.CategoryRepository;
-import com.example.todolist.domain.repository.TodoRepository;
-import com.example.todolist.domain.repository.UserRepository;
 import jakarta.inject.Named;
 
 /**

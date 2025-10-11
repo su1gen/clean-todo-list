@@ -1,7 +1,7 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
+import com.example.todolist.application.outport.UserRepository;
 import com.example.todolist.domain.model.User;
-import com.example.todolist.domain.repository.UserRepository;
 import com.example.todolist.infrastructure.persistence.entity.UserEntity;
 import com.example.todolist.infrastructure.persistence.mapper.UserMapper;
 import org.springframework.stereotype.Component;
@@ -13,20 +13,20 @@ import java.util.stream.Collectors;
 /**
  * Реализация доменного репозитория через JPA.
  * Это адаптер: переводит вызовы из domain слоя в JPA.
- *
+ * <p>
  * Преобразования:
  * Domain User → UserEntity → БД
  * БД → UserEntity → Domain User
- *
+ * <p>
  * Это адаптер, который связывает бизнес-логику (domain) с технологией (JPA)
  */
 @Component
- class UserRepositoryImpl implements UserRepository {
+class UserRepositoryImpl implements UserRepository {
 
     private final JpaUserRepository jpaRepository;
     private final UserMapper mapper;
 
-     UserRepositoryImpl(JpaUserRepository jpaRepository, UserMapper mapper) {
+    UserRepositoryImpl(JpaUserRepository jpaRepository, UserMapper mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }

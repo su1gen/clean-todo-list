@@ -1,9 +1,9 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.outport.TodoRepository;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.domain.repository.TodoRepository;
 import jakarta.inject.Named;
 
 import java.time.LocalDateTime;
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
  * Use Case: Получение списка Todo пользователя с различными фильтрами.
  */
 @Named
- class GetUserTodosUseCase implements GetUserTodos {
+class GetUserTodosUseCase implements GetUserTodos {
 
     private final TodoRepository todoRepository;
 
-     GetUserTodosUseCase(TodoRepository todoRepository) {
+    GetUserTodosUseCase(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
     }
 

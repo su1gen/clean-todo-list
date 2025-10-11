@@ -1,0 +1,21 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.example.todolist.application.outport'
+version = '0.0.1-SNAPSHOT'
+description = 'application module example'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":domain"))
+}

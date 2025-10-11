@@ -1,8 +1,8 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CategoryResponse;
+import com.example.todolist.application.outport.CategoryRepository;
 import com.example.todolist.domain.model.Category;
-import com.example.todolist.domain.repository.CategoryRepository;
 import jakarta.inject.Named;
 
 import java.util.List;

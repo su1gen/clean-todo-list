@@ -1,7 +1,7 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
+import com.example.todolist.application.outport.CategoryRepository;
 import com.example.todolist.domain.model.Category;
-import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.infrastructure.persistence.entity.CategoryEntity;
 import com.example.todolist.infrastructure.persistence.mapper.CategoryMapper;
 import org.springframework.stereotype.Component;
@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
  * Реализация доменного репозитория через JPA.
  */
 @Component
- class CategoryRepositoryImpl implements CategoryRepository {
+class CategoryRepositoryImpl implements CategoryRepository {
 
     private final JpaCategoryRepository jpaRepository;
     private final CategoryMapper mapper;
 
-     CategoryRepositoryImpl(
+    CategoryRepositoryImpl(
             JpaCategoryRepository jpaRepository,
             CategoryMapper mapper
     ) {

@@ -1,4 +1,4 @@
-package com.example.todolist.domain.repository;
+package com.example.todolist.application.outport;
 
 import com.example.todolist.domain.model.Category;
 

@@ -1,9 +1,9 @@
 package com.example.todolist.application.usecase;
 
+import com.example.todolist.application.outport.TodoRepository;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.repository.TodoRepository;
 import jakarta.inject.Named;
 
 /**

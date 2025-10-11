@@ -2,10 +2,10 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.AuthResponse;
 import com.example.todolist.application.dto.LoginRequest;
+import com.example.todolist.application.outport.UserRepository;
 import com.example.todolist.domain.exception.InvalidCredentialsException;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.User;
-import com.example.todolist.domain.repository.UserRepository;
 import com.example.todolist.domain.service.PasswordEncoder;
 import jakarta.inject.Named;
 

@@ -18,7 +18,8 @@ repositories {
 
 dependencies {
     implementation(project(":domain"))
-//    implementation(":application")
+    implementation(project(":application:outport"))
+
 //    implementation("jakarta.annotation:jakarta.annotation-api:2.1.1")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.5.5")
 //    implementation("org.springframework:spring-tx:6.2.10") spring transcations

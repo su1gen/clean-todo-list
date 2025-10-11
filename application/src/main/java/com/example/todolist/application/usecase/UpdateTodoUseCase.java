@@ -2,16 +2,16 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.application.dto.UpdateTodoRequest;
+import com.example.todolist.application.outport.CategoryRepository;
+import com.example.todolist.application.outport.TodoRepository;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.repository.CategoryRepository;
-import com.example.todolist.domain.repository.TodoRepository;
 import jakarta.inject.Named;
 
 @Named
-class UpdateTodoUseCase implements UpdateTodo{
+class UpdateTodoUseCase implements UpdateTodo {
 
     private final TodoRepository todoRepository;
     private final CategoryRepository categoryRepository;
@@ -36,7 +36,7 @@ class UpdateTodoUseCase implements UpdateTodo{
         }
 
         // 3. Если указана новая категория, проверить её
-        if (request.categoryId()!=null) {
+        if (request.categoryId() != null) {
             categoryRepository.findByIdAndNotDeleted(request.categoryId())
                     .filter(category -> category.belongsToUser(userId))
                     .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
