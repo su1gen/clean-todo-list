@@ -1,0 +1,72 @@
+services:
+  postgres:
+    image: postgres:16.10-alpine
+    container_name: prod_postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prod_user
+      POSTGRES_PASSWORD: prod_password
+      POSTGRES_DB: prod_db
+    command: postgres -c max_connections=1000
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - prod-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - prod-todo-list-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prod_spring_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/prod_db
+      SPRING_DATASOURCE_USERNAME: prod_user
+      SPRING_DATASOURCE_PASSWORD: prod_password
+    depends_on:
+      - postgres
+    ports:
+      - "8081:8080"
+    networks:
+      - prod-todo-list-network
+
+  seed-data:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prod_spring_seeder
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/prod_db
+      SPRING_DATASOURCE_USERNAME: prod_user
+      SPRING_DATASOURCE_PASSWORD: prod_password
+      NUM_OF_TODOS: 200
+      NUM_OF_CATEGORIES: 4
+      BATCH_SIZE: 100
+    command: [ "--seed-data" ]
+    networks:
+      - prod-todo-list-network
+    profiles:
+      - seed
+    restart: "no"
+
+  frontend:
+    build:
+      context: ./todo-list-ui
+      dockerfile: Dockerfile
+    container_name: prod_next_frontend
+    env_file:
+      - ./todo-list-ui/.env.production
+    depends_on:
+      - backend
+    ports:
+      - "3001:3000"
+    networks:
+      - prod-todo-list-network
+
+networks:
+  prod-todo-list-network:
+
+volumes:
+  prod-postgres-data:
