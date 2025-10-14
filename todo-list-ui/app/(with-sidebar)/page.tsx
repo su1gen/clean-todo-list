@@ -1,6 +1,6 @@
 "use client"
 
-import {useState, useEffect, Suspense} from "react"
+import {useState, useEffect} from "react"
 import TaskList from "@/components/tasks/task-list";
 import {routes} from "@/lib/routes";
 import {Task} from "@/types";

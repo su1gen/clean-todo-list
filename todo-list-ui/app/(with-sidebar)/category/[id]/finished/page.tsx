@@ -2,14 +2,14 @@
 
 import TaskList from "@/components/tasks/task-list";
 import {routes} from "@/lib/routes";
-import {CategoryWithTodos} from "@/types";
+import {CategoryWithTasks} from "@/types";
 import {notFound, useParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import apiFront from "@/lib/api-front";
 import Loader from "@/components/ui/loader";
 
 export default function FinishedTasks() {
-    const [categoryWithTodos, setCategoryWithTodos] = useState<CategoryWithTodos | null>(null)
+    const [categoryWithTodos, setCategoryWithTodos] = useState<CategoryWithTasks | null>(null)
     const [loading, setLoading] = useState(true)
 
     const { id } = useParams<{id: string}>();
@@ -19,7 +19,7 @@ export default function FinishedTasks() {
         notFound()
     }
 
-    const fetchCategoryTasks = async (): Promise<CategoryWithTodos> => {
+    const fetchCategoryTasks = async (): Promise<CategoryWithTasks> => {
         const response = await apiFront.get(routes.todos.categoryTodosFinished(categoryId))
         return response.data
     }

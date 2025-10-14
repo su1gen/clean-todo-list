@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Task } from "@/types";
+import {Task} from "@/types";
 import { Eye } from "lucide-react";
 
 type TaskListItem = {

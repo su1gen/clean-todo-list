@@ -89,7 +89,7 @@ export default function TaskForm({task}: TaskFormProps) {
           id="description"
           className="w-full font-medium resize-none"
           placeholder="Опишите детали задачи..."
-          {...register("description", {required: "Описание обязательно"})}
+          {...register("description")}
         />
         {errors.description && <p className="text-red-500">{errors.description.message}</p>}
       </div>
