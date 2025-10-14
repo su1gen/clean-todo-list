@@ -15,47 +15,28 @@ import java.util.Objects;
  * - Бизнес-методы находятся здесь
  */
 public class User {
-    private final Long id;
-    private final String email;
-    private final String password; // В идеале это должен быть Value Object
+    private final UserId id;
+    private final Email email;
+    private final Password password;
     private final LocalDateTime createdAt;
 
     // Полный конструктор (для восстановления из БД)
-    public User(Long id, String email, String password, LocalDateTime createdAt) {
+    public User(UserId id, Email email, Password password, LocalDateTime createdAt) {
         this.id = id;
-        this.email = validateEmail(email);
-        this.password = validatePassword(password);
+        this.email = email;
+        this.password = password;
         this.createdAt = createdAt;
     }
 
-    // Бизнес-валидация
-    private String validateEmail(String email) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty");
-        }
-        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            throw new IllegalArgumentException("Invalid email format");
-        }
-        return email.toLowerCase().trim();
-    }
-
-    private String validatePassword(String password) {
-        if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
-        // Не проверяем длину для хеша, т.к. это может быть BCrypt хеш
-        return password;
-    }
-
     // Бизнес-метод: изменение пароля
-    public User changePassword(String newPassword) {
+    public User changePassword(Password newPassword) {
         return new User(this.id, this.email, newPassword, this.createdAt);
     }
 
     // Getters
-    public Long getId() { return id; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
+    public UserId getId() { return id; }
+    public Email getEmail() { return email; }
+    public Password getPassword() { return password; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     // equals и hashCode по бизнес-ключу (email)

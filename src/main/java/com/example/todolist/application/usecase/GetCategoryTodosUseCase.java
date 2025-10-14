@@ -2,21 +2,25 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CategoryWithTodosResponse;
 import com.example.todolist.application.dto.TodoResponse;
-import com.example.todolist.application.dto.TodoStatusResponse;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.TodoStatus;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.TodoRepository;
+import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 class GetCategoryTodosUseCase implements GetCategoryTodos {
     private final TodoRepository todoRepository;
     private final CategoryRepository categoryRepository;
+    private final TodoResponseMapper todoResponseMapper;
 
-    GetCategoryTodosUseCase(TodoRepository todoRepository, CategoryRepository categoryRepository) {
+    GetCategoryTodosUseCase(TodoRepository todoRepository, CategoryRepository categoryRepository, TodoResponseMapper todoResponseMapper) {
         this.todoRepository = todoRepository;
         this.categoryRepository = categoryRepository;
+        this.todoResponseMapper = todoResponseMapper;
     }
 
     @Override
@@ -27,23 +31,13 @@ class GetCategoryTodosUseCase implements GetCategoryTodos {
 
         var todos = todoRepository.findByUserIdAndCategoryIdAndDeletedAtIsNullAndStatusOrderByIdDesc(userId, categoryId, status);
 
+        List<TodoResponse> todoResponseList = todos.stream()
+                .map(todoResponseMapper::toResponse)
+                .toList();
+
         return new CategoryWithTodosResponse(
-                category.getTitle(),
-                todos
-                        .stream()
-                        .map(item -> new TodoResponse(
-                                item.getId(),
-                                item.getTitle(),
-                                item.getDescription(),
-                                item.getCategoryId(),
-                                new TodoStatusResponse(
-                                        item.getStatus().getId(),
-                                        item.getStatus().getTitle()
-                                ),
-                                item.getCreatedAt(),
-                                item.getPlannedAt()
-                        ))
-                        .toList()
+                category.getTitle().getValue(),
+                todoResponseList
         );
     }
 }

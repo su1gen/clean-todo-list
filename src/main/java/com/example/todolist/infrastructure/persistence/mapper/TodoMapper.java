@@ -1,6 +1,6 @@
 package com.example.todolist.infrastructure.persistence.mapper;
 
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.*;
 import com.example.todolist.infrastructure.persistence.entity.TodoEntity;
 import org.springframework.stereotype.Component;
 
@@ -12,16 +12,16 @@ public class TodoMapper {
      */
     public TodoEntity toEntity(Todo todo) {
         TodoEntity entity = new TodoEntity(
-                todo.getTitle(),
+                todo.getTitle().getValue(),
                 todo.getDescription(),
-                todo.getCategoryId(),
-                todo.getUserId(),
+                todo.getCategoryId().getValue(),
+                todo.getUserId().getValue(),
                 todo.getStatus(),
                 todo.getPlannedAt()
         );
 
-        if (todo.getId() != null) {
-            entity.setId(todo.getId());
+        if (todo.getId().notEmpty()) {
+            entity.setId(todo.getId().getValue());
         }
 
         if (todo.getCreatedAt() != null) {
@@ -38,11 +38,11 @@ public class TodoMapper {
      */
     public Todo toDomain(TodoEntity entity) {
         return new Todo(
-                entity.getId(),
-                entity.getTitle(),
+                TodoId.of(entity.getId()),
+                Title.of(entity.getTitle()),
                 entity.getDescription(),
-                entity.getCategoryId(),
-                entity.getUserId(),
+                CategoryId.of(entity.getCategoryId()),
+                UserId.of(entity.getUserId()),
                 entity.getStatus(),
                 entity.getCreatedAt(),
                 entity.getDeletedAt(),

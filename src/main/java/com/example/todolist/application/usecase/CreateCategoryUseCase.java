@@ -4,8 +4,12 @@ import com.example.todolist.application.dto.CategoryResponse;
 import com.example.todolist.application.dto.CreateCategoryDto;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.CategoryId;
+import com.example.todolist.domain.model.Title;
+import com.example.todolist.domain.model.UserId;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.UserRepository;
+import com.example.todolist.presentation.mapper.CategoryResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -23,13 +27,15 @@ class CreateCategoryUseCase implements CreateCategory {
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final CategoryResponseMapper categoryResponseMapper;
 
     CreateCategoryUseCase(
             CategoryRepository categoryRepository,
-            UserRepository userRepository
+            UserRepository userRepository, CategoryResponseMapper categoryResponseMapper
     ) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.categoryResponseMapper = categoryResponseMapper;
     }
 
     /**
@@ -46,19 +52,18 @@ class CreateCategoryUseCase implements CreateCategory {
         }
 
         // 2. Создать доменную модель (валидация внутри конструктора)
-        Category category = new Category(null, request.title(), userId, LocalDateTime.now(), null);
+        Category category = new Category(
+                CategoryId.of(null),
+                Title.of(request.title()),
+                UserId.of(userId),
+                LocalDateTime.now(),
+                null
+        );
 
         // 3. Сохранить
         Category savedCategory = categoryRepository.save(category);
 
         // 4. Преобразовать в DTO
-        return mapToResponse(savedCategory);
-    }
-
-    private CategoryResponse mapToResponse(Category category) {
-        return new CategoryResponse(
-                category.getId(),
-                category.getTitle()
-        );
+        return categoryResponseMapper.toResponse(savedCategory);
     }
 }

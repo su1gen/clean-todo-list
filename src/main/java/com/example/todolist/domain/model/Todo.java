@@ -15,69 +15,42 @@ import java.util.Objects;
  * - Soft delete через deletedAt
  */
 public class Todo {
-    private final Long id;
-    private final String title;
+    private final TodoId id;
+    private final Title title;
     private final String description;
-    private final Long categoryId;
-    private final Long userId;
+    private final CategoryId categoryId;
+    private final UserId userId;
     private final TodoStatus status;
     private final LocalDateTime createdAt;
     private final LocalDateTime deletedAt;
     private final LocalDateTime plannedAt;
 
     public Todo(
-            Long id,
-            String title,
+            TodoId id,
+            Title title,
             String description,
-            Long categoryId,
-            Long userId,
+            CategoryId categoryId,
+            UserId userId,
             TodoStatus status,
             LocalDateTime createdAt,
             LocalDateTime deletedAt,
             LocalDateTime plannedAt
     ) {
         this.id = id;
-        this.title = validateTitle(title);
-        this.description = validateDescription(description);
+        this.title = title;
+        this.description = description;
         this.categoryId = categoryId;
-        this.userId = validateUserId(userId);
+        this.userId = userId;
         this.status = status;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
         this.plannedAt = plannedAt;
     }
 
-    // Валидация title
-    private String validateTitle(String title) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Todo title cannot be empty");
-        }
-        if (title.length() > 255) {
-            throw new IllegalArgumentException("Todo title cannot exceed 255 characters");
-        }
-        return title.trim();
-    }
-
-    // Валидация description
-    private String validateDescription(String description) {
-        if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Todo description cannot be empty");
-        }
-        return description.trim();
-    }
-
-    // Валидация userId
-    private Long validateUserId(Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("Todo must belong to a user");
-        }
-        return userId;
-    }
-
     /**
      * Обновить основные данные задачи
      */
-    public Todo update(String newTitle, String newDescription, Long newCategoryId, TodoStatus newTodoStatus, LocalDateTime newPlannedAt) {
+    public Todo update(Title newTitle, String newDescription, CategoryId newCategoryId, TodoStatus newTodoStatus, LocalDateTime newPlannedAt) {
         return new Todo(this.id, newTitle, newDescription, newCategoryId, this.userId,
                 newTodoStatus, this.createdAt, this.deletedAt, newPlannedAt);
     }
@@ -93,22 +66,6 @@ public class Todo {
         }
         return new Todo(this.id, this.title, this.description, this.categoryId, this.userId,
                 newStatus, this.createdAt, this.deletedAt, this.plannedAt);
-    }
-
-    /**
-     * Привязать к категории
-     */
-    public Todo assignToCategory(Long categoryId) {
-        return new Todo(this.id, this.title, this.description, categoryId, this.userId,
-                this.status, this.createdAt, this.deletedAt, this.plannedAt);
-    }
-
-    /**
-     * Открепить от категории
-     */
-    public Todo removeFromCategory() {
-        return new Todo(this.id, this.title, this.description, null, this.userId,
-                this.status, this.createdAt, this.deletedAt, this.plannedAt);
     }
 
     /**
@@ -146,16 +103,20 @@ public class Todo {
     }
 
     public boolean belongsToUser(Long userId) {
-        return Objects.equals(this.userId, userId);
+        return Objects.equals(this.userId.getValue(), userId);
+    }
+
+    public boolean hasCategory() {
+        return Objects.nonNull(categoryId);
     }
 
 
     // Getters
-    public Long getId() { return id; }
-    public String getTitle() { return title; }
+    public TodoId getId() { return id; }
+    public Title getTitle() { return title; }
     public String getDescription() { return description; }
-    public Long getCategoryId() { return categoryId; }
-    public Long getUserId() { return userId; }
+    public CategoryId getCategoryId() { return categoryId; }
+    public UserId getUserId() { return userId; }
     public TodoStatus getStatus() { return status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getDeletedAt() { return deletedAt; }

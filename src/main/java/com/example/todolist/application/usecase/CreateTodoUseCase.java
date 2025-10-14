@@ -5,11 +5,11 @@ import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.application.dto.TodoStatusResponse;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.*;
 import com.example.todolist.domain.repository.CategoryRepository;
 import com.example.todolist.domain.repository.TodoRepository;
 import com.example.todolist.domain.repository.UserRepository;
+import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -28,15 +28,17 @@ class CreateTodoUseCase implements CreateTodo {
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final TodoResponseMapper todoResponseMapper;
 
     CreateTodoUseCase(
             TodoRepository todoRepository,
             UserRepository userRepository,
-            CategoryRepository categoryRepository
+            CategoryRepository categoryRepository, TodoResponseMapper todoResponseMapper
     ) {
         this.todoRepository = todoRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.todoResponseMapper = todoResponseMapper;
     }
 
     @Override
@@ -55,11 +57,11 @@ class CreateTodoUseCase implements CreateTodo {
 
         // 3. Создать доменную модель (валидация внутри)
         Todo todo = new Todo(
-                null,
-                request.title(),
+                TodoId.of(null),
+                Title.of(request.title()),
                 request.description(),
-                request.categoryId(),
-                userId,
+                CategoryId.of(request.categoryId()),
+                UserId.of(userId),
                 TodoStatus.CREATED,
                 LocalDateTime.now(),
                 null,
@@ -70,21 +72,6 @@ class CreateTodoUseCase implements CreateTodo {
         Todo savedTodo = todoRepository.save(todo);
 
         // 5. Вернуть ответ
-        return mapToResponse(savedTodo);
-    }
-
-    private TodoResponse mapToResponse(Todo todo) {
-        return new TodoResponse(
-                todo.getId(),
-                todo.getTitle(),
-                todo.getDescription(),
-                todo.getCategoryId(),
-                new TodoStatusResponse(
-                        todo.getStatus().getId(),
-                        todo.getStatus().getTitle()
-                ),
-                todo.getCreatedAt(),
-                todo.getPlannedAt()
-        );
+        return todoResponseMapper.toResponse(savedTodo);
     }
 }

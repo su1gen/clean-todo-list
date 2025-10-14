@@ -13,38 +13,19 @@ import java.util.Objects;
  * - Удалённые категории не должны отображаться в обычных запросах
  */
 public class Category {
-    private final Long id;
-    private final String title;
-    private final Long userId;
+    private final CategoryId id;
+    private final Title title;
+    private final UserId userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime deletedAt;
 
     // Полный конструктор (для восстановления из БД)
-    public Category(Long id, String title, Long userId, LocalDateTime createdAt, LocalDateTime deletedAt) {
+    public Category(CategoryId id, Title title, UserId userId, LocalDateTime createdAt, LocalDateTime deletedAt) {
         this.id = id;
-        this.title = validateTitle(title);
-        this.userId = validateUserId(userId);
+        this.title = title;
+        this.userId = userId;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
-    }
-
-    // Валидация title
-    private String validateTitle(String title) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Category title cannot be empty");
-        }
-        if (title.length() > 255) {
-            throw new IllegalArgumentException("Category title cannot exceed 255 characters");
-        }
-        return title.trim();
-    }
-
-    // Валидация userId
-    private Long validateUserId(Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("Category must belong to a user");
-        }
-        return userId;
     }
 
     // Бизнес-методы
@@ -52,7 +33,7 @@ public class Category {
     /**
      * Обновить название категории
      */
-    public Category updateTitle(String newTitle) {
+    public Category updateTitle(Title newTitle) {
         return new Category(this.id, newTitle, this.userId, this.createdAt, this.deletedAt);
     }
 
@@ -87,19 +68,19 @@ public class Category {
      * Проверка: принадлежит ли категория пользователю
      */
     public boolean belongsToUser(Long userId) {
-        return Objects.equals(this.userId, userId);
+        return Objects.equals(this.userId.getValue(), userId);
     }
 
     // Getters
-    public Long getId() {
+    public CategoryId getId() {
         return id;
     }
 
-    public String getTitle() {
+    public Title getTitle() {
         return title;
     }
 
-    public Long getUserId() {
+    public UserId getUserId() {
         return userId;
     }
 
@@ -128,8 +109,8 @@ public class Category {
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", userId=" + userId +
+                ", title='" + title.getValue() + '\'' +
+                ", userId=" + userId.getValue() +
                 ", deleted=" + isDeleted() +
                 '}';
     }

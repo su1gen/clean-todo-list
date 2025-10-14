@@ -1,6 +1,9 @@
 package com.example.todolist.infrastructure.persistence.mapper;
 
 import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.CategoryId;
+import com.example.todolist.domain.model.Title;
+import com.example.todolist.domain.model.UserId;
 import com.example.todolist.infrastructure.persistence.entity.CategoryEntity;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +18,12 @@ public class CategoryMapper {
      */
     public CategoryEntity toEntity(Category category) {
         CategoryEntity entity = new CategoryEntity(
-                category.getTitle(),
-                category.getUserId()
+                category.getTitle().getValue(),
+                category.getUserId().getValue()
         );
 
-        if (category.getId() != null) {
-            entity.setId(category.getId());
+        if (category.getId().notEmpty()) {
+            entity.setId(category.getId().getValue());
         }
 
         if (category.getCreatedAt() != null) {
@@ -37,9 +40,9 @@ public class CategoryMapper {
      */
     public Category toDomain(CategoryEntity entity) {
         return new Category(
-                entity.getId(),
-                entity.getTitle(),
-                entity.getUserId(),
+                CategoryId.of(entity.getId()),
+                Title.of(entity.getTitle()),
+                UserId.of(entity.getUserId()),
                 entity.getCreatedAt(),
                 entity.getDeletedAt()
         );

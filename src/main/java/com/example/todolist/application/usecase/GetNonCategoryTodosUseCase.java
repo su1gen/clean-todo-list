@@ -1,9 +1,9 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoResponse;
-import com.example.todolist.application.dto.TodoStatusResponse;
 import com.example.todolist.domain.model.TodoStatus;
 import com.example.todolist.domain.repository.TodoRepository;
+import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,9 +11,11 @@ import java.util.List;
 @Component
 class GetNonCategoryTodosUseCase implements GetNonCategoryTodos {
     private final TodoRepository todoRepository;
+    private final TodoResponseMapper todoResponseMapper;
 
-    GetNonCategoryTodosUseCase(TodoRepository todoRepository) {
+    GetNonCategoryTodosUseCase(TodoRepository todoRepository, TodoResponseMapper todoResponseMapper) {
         this.todoRepository = todoRepository;
+        this.todoResponseMapper = todoResponseMapper;
     }
 
     @Override
@@ -24,18 +26,7 @@ class GetNonCategoryTodosUseCase implements GetNonCategoryTodos {
 
         return todos
                 .stream()
-                .map(item -> new TodoResponse(
-                        item.getId(),
-                        item.getTitle(),
-                        item.getDescription(),
-                        item.getCategoryId(),
-                        new TodoStatusResponse(
-                                item.getStatus().getId(),
-                                item.getStatus().getTitle()
-                        ),
-                        item.getCreatedAt(),
-                        item.getPlannedAt()
-                ))
+                .map(todoResponseMapper::toResponse)
                 .toList();
     }
 }

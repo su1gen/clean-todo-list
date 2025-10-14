@@ -26,7 +26,7 @@ class GetTodoUseCase implements GetTodo {
         // 1. Найти задачу (включая удалённые)
         Todo todo = todoRepository.findByIdAndNotDeleted(todoId)
                 .orElseThrow(() -> new TodoNotFoundException(todoId));
-
+        
         // 2. Проверить права доступа
         if (!todo.belongsToUser(userId)) {
             throw new TodoAccessDeniedException(todoId, userId);
@@ -38,10 +38,10 @@ class GetTodoUseCase implements GetTodo {
 
     private TodoResponse mapToResponse(Todo todo) {
         return new TodoResponse(
-                todo.getId(),
-                todo.getTitle(),
+                todo.getId().getValue(),
+                todo.getTitle().getValue(),
                 todo.getDescription(),
-                todo.getCategoryId(),
+                todo.getCategoryId().getValue(),
                 new TodoStatusResponse(
                         todo.getStatus().getId(),
                         todo.getStatus().getTitle()

@@ -1,8 +1,13 @@
 package com.example.todolist.infrastructure.persistence.mapper;
 
+import com.example.todolist.domain.model.Email;
+import com.example.todolist.domain.model.Password;
 import com.example.todolist.domain.model.User;
+import com.example.todolist.domain.model.UserId;
 import com.example.todolist.infrastructure.persistence.entity.UserEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /**
  * Mapper между доменной моделью и JPA entity.
@@ -17,12 +22,12 @@ public class UserMapper {
      */
     public UserEntity toEntity(User user) {
         UserEntity entity = new UserEntity(
-                user.getEmail(),
-                user.getPassword()
+                user.getEmail().getValue(),
+                user.getPassword().getValue()
         );
 
-        if (user.getId() != null) {
-            entity.setId(user.getId());
+        if (user.getId().notEmpty()) {
+            entity.setId(user.getId().getValue());
         }
 
         if (user.getCreatedAt() != null) {
@@ -37,9 +42,9 @@ public class UserMapper {
      */
     public User toDomain(UserEntity entity) {
         return new User(
-                entity.getId(),
-                entity.getEmail(),
-                entity.getPassword(),
+                UserId.of(entity.getId()),
+                Email.of(entity.getEmail()),
+                Password.of(entity.getPassword()),
                 entity.getCreatedAt()
         );
     }

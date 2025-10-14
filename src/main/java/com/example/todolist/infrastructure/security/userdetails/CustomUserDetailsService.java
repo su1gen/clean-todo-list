@@ -33,9 +33,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // Преобразуем в Spring Security UserDetails
         return new CustomUserDetails(
-                user.getId(),
-                user.getEmail(),
-                user.getPassword(),
+                user.getId().getValue(),
+                user.getEmail().getValue(),
+                user.getPassword().getValue(),
                 List.of() // Пока нет ролей, позже добавим
         );
     }

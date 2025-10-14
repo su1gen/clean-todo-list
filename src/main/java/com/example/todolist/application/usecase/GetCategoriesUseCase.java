@@ -3,6 +3,7 @@ package com.example.todolist.application.usecase;
 import com.example.todolist.application.dto.CategoryResponse;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.repository.CategoryRepository;
+import com.example.todolist.presentation.mapper.CategoryResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 @Component
 class GetCategoriesUseCase implements GetCategories{
     private final CategoryRepository categoryRepository;
+    private final CategoryResponseMapper categoryResponseMapper;
 
-    public GetCategoriesUseCase(CategoryRepository categoryRepository) {
+    public GetCategoriesUseCase(CategoryRepository categoryRepository, CategoryResponseMapper categoryResponseMapper) {
         this.categoryRepository = categoryRepository;
+        this.categoryResponseMapper = categoryResponseMapper;
     }
 
     @Override
@@ -21,14 +24,7 @@ class GetCategoriesUseCase implements GetCategories{
 
         return categories
                 .stream()
-                .map(this::mapToResponse)
+                .map(categoryResponseMapper::toResponse)
                 .toList();
-    }
-
-    private CategoryResponse mapToResponse(Category category) {
-        return new CategoryResponse(
-                category.getId(),
-                category.getTitle()
-        );
     }
 }
