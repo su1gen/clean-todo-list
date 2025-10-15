@@ -1,8 +1,7 @@
-package com.example.todolist.domain.repository;
+package com.example.todolist.application.outbound;
 
 import com.example.todolist.domain.model.User;
 
-import java.util.List;
 import java.util.Optional;
 
 /**

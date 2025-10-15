@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.LoginRequest;
-import com.example.todolist.application.usecase.LoginUser;
+import com.example.todolist.application.inbound.user.LoginUser;
 import com.example.todolist.infrastructure.security.jwt.JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;

@@ -1,7 +1,7 @@
 package com.example.todolist.infrastructure.security.userdetails;
 
 import com.example.todolist.domain.model.User;
-import com.example.todolist.domain.repository.UserRepository;
+import com.example.todolist.application.outbound.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

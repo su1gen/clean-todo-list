@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.TodoStatusResponse;
-import com.example.todolist.application.usecase.GetTodoStatuses;
+import com.example.todolist.application.inbound.todo.GetTodoStatuses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

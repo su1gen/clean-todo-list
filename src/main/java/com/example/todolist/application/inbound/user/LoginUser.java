@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.inbound.user;
 
 import com.example.todolist.application.dto.LoginRequest;
 import com.example.todolist.application.dto.TokenDto;

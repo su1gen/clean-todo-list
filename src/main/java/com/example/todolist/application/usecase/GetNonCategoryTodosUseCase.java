@@ -1,8 +1,9 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.inbound.todo.GetNonCategoryTodos;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.domain.repository.TodoRepository;
+import com.example.todolist.application.outbound.TodoRepository;
 import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 

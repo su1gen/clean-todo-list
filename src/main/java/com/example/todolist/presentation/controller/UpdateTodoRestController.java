@@ -2,7 +2,7 @@ package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.application.dto.UpdateTodoDto;
-import com.example.todolist.application.usecase.UpdateTodo;
+import com.example.todolist.application.inbound.todo.UpdateTodo;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

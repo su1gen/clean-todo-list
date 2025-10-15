@@ -2,13 +2,13 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CreateTodoDto;
 import com.example.todolist.application.dto.TodoResponse;
-import com.example.todolist.application.dto.TodoStatusResponse;
+import com.example.todolist.application.inbound.todo.CreateTodo;
+import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.*;
-import com.example.todolist.domain.repository.CategoryRepository;
-import com.example.todolist.domain.repository.TodoRepository;
-import com.example.todolist.domain.repository.UserRepository;
+import com.example.todolist.application.outbound.TodoRepository;
+import com.example.todolist.application.outbound.UserRepository;
 import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 
@@ -27,19 +27,16 @@ class CreateTodoUseCase implements CreateTodo {
 
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final ActiveCategoryExtractor activeCategoryExtractor;
     private final TodoResponseMapper todoResponseMapper;
 
-    CreateTodoUseCase(
-            TodoRepository todoRepository,
-            UserRepository userRepository,
-            CategoryRepository categoryRepository, TodoResponseMapper todoResponseMapper
-    ) {
+    CreateTodoUseCase(TodoRepository todoRepository, UserRepository userRepository, ActiveCategoryExtractor activeCategoryExtractor, TodoResponseMapper todoResponseMapper) {
         this.todoRepository = todoRepository;
         this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
+        this.activeCategoryExtractor = activeCategoryExtractor;
         this.todoResponseMapper = todoResponseMapper;
     }
+
 
     @Override
     public TodoResponse execute(CreateTodoDto request, Long userId) {
@@ -50,7 +47,7 @@ class CreateTodoUseCase implements CreateTodo {
 
         // 2. Если указана категория, проверить её существование и принадлежность пользователю
         if (request.categoryId() != null) {
-            categoryRepository.findByIdAndNotDeleted(request.categoryId())
+            activeCategoryExtractor.getActiveCategoryById(request.categoryId())
                     .filter(category -> category.belongsToUser(userId))
                     .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
         }

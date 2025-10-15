@@ -2,13 +2,15 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CategoryResponse;
 import com.example.todolist.application.dto.CreateCategoryDto;
+import com.example.todolist.application.inbound.category.CreateCategory;
+import com.example.todolist.application.outbound.category.CategoryNextIdExtractor;
+import com.example.todolist.application.outbound.category.CategoryPersister;
+import com.example.todolist.application.outbound.UserRepository;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.model.CategoryId;
 import com.example.todolist.domain.model.Title;
 import com.example.todolist.domain.model.UserId;
-import com.example.todolist.domain.repository.CategoryRepository;
-import com.example.todolist.domain.repository.UserRepository;
 import com.example.todolist.presentation.mapper.CategoryResponseMapper;
 import org.springframework.stereotype.Component;
 
@@ -25,15 +27,17 @@ import java.time.LocalDateTime;
 @Component
 class CreateCategoryUseCase implements CreateCategory {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryPersister categoryPersister;
+    private final CategoryNextIdExtractor categoryNextIdExtractor;
     private final UserRepository userRepository;
     private final CategoryResponseMapper categoryResponseMapper;
 
     CreateCategoryUseCase(
-            CategoryRepository categoryRepository,
+            CategoryPersister categoryPersister, CategoryNextIdExtractor categoryNextIdExtractor,
             UserRepository userRepository, CategoryResponseMapper categoryResponseMapper
     ) {
-        this.categoryRepository = categoryRepository;
+        this.categoryPersister = categoryPersister;
+        this.categoryNextIdExtractor = categoryNextIdExtractor;
         this.userRepository = userRepository;
         this.categoryResponseMapper = categoryResponseMapper;
     }
@@ -51,7 +55,7 @@ class CreateCategoryUseCase implements CreateCategory {
             throw new UserNotFoundException(userId);
         }
 
-        Long categoryId = categoryRepository.getNextCategoryId();
+        Long categoryId = categoryNextIdExtractor.getNextCategoryId();
 
         // 2. Создать доменную модель (валидация внутри конструктора)
         Category category = new Category(
@@ -63,7 +67,7 @@ class CreateCategoryUseCase implements CreateCategory {
         );
 
         // 3. Сохранить
-        Category savedCategory = categoryRepository.save(category);
+        Category savedCategory = categoryPersister.persist(category);
 
         // 4. Преобразовать в DTO
         return categoryResponseMapper.toResponse(savedCategory);

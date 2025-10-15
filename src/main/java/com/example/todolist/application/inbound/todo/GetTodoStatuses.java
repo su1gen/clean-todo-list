@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.inbound.todo;
 
 import com.example.todolist.application.dto.TodoStatusResponse;
 

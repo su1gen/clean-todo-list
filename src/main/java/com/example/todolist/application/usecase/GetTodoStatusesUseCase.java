@@ -1,6 +1,7 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoStatusResponse;
+import com.example.todolist.application.inbound.todo.GetTodoStatuses;
 import com.example.todolist.domain.model.TodoStatus;
 import com.example.todolist.presentation.mapper.TodoStatusResponseMapper;
 import org.springframework.stereotype.Component;

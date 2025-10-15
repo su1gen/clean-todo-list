@@ -3,7 +3,7 @@ package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.AuthResponse;
 import com.example.todolist.application.dto.RegisterRequest;
-import com.example.todolist.application.usecase.RegisterUser;
+import com.example.todolist.application.inbound.user.RegisterUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

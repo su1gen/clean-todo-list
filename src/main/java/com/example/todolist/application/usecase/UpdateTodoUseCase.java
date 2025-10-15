@@ -2,6 +2,8 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.application.dto.UpdateTodoDto;
+import com.example.todolist.application.inbound.todo.UpdateTodo;
+import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
@@ -9,24 +11,23 @@ import com.example.todolist.domain.model.CategoryId;
 import com.example.todolist.domain.model.Title;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.domain.repository.CategoryRepository;
-import com.example.todolist.domain.repository.TodoRepository;
+import com.example.todolist.application.outbound.TodoRepository;
 import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-class UpdateTodoUseCase implements UpdateTodo{
+class UpdateTodoUseCase implements UpdateTodo {
 
     private final TodoRepository todoRepository;
-    private final CategoryRepository categoryRepository;
+    private final ActiveCategoryExtractor activeCategoryExtractor;
     private final TodoResponseMapper todoResponseMapper;
 
     UpdateTodoUseCase(
             TodoRepository todoRepository,
-            CategoryRepository categoryRepository, TodoResponseMapper todoResponseMapper
+            ActiveCategoryExtractor activeCategoryExtractor, TodoResponseMapper todoResponseMapper
     ) {
         this.todoRepository = todoRepository;
-        this.categoryRepository = categoryRepository;
+        this.activeCategoryExtractor = activeCategoryExtractor;
         this.todoResponseMapper = todoResponseMapper;
     }
 
@@ -43,7 +44,7 @@ class UpdateTodoUseCase implements UpdateTodo{
 
         // 3. Если указана новая категория, проверить её
         if (request.categoryId()!=null) {
-            categoryRepository.findByIdAndNotDeleted(request.categoryId())
+            activeCategoryExtractor.getActiveCategoryById(request.categoryId())
                     .filter(category -> category.belongsToUser(userId))
                     .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
         }

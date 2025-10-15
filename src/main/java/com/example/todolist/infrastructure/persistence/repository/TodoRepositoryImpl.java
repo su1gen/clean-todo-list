@@ -2,16 +2,14 @@ package com.example.todolist.infrastructure.persistence.repository;
 
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.domain.repository.TodoRepository;
+import com.example.todolist.application.outbound.TodoRepository;
 import com.example.todolist.infrastructure.persistence.entity.TodoEntity;
 import com.example.todolist.infrastructure.persistence.mapper.TodoMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 /**

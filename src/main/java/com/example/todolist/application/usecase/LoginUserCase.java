@@ -2,6 +2,7 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.LoginRequest;
 import com.example.todolist.application.dto.TokenDto;
+import com.example.todolist.application.inbound.user.LoginUser;
 import com.example.todolist.infrastructure.security.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

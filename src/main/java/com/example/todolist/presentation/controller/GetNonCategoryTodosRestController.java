@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.TodoResponse;
-import com.example.todolist.application.usecase.GetNonCategoryTodos;
+import com.example.todolist.application.inbound.todo.GetNonCategoryTodos;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

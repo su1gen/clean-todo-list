@@ -1,14 +1,12 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
 import com.example.todolist.domain.model.User;
-import com.example.todolist.domain.repository.UserRepository;
+import com.example.todolist.application.outbound.UserRepository;
 import com.example.todolist.infrastructure.persistence.entity.UserEntity;
 import com.example.todolist.infrastructure.persistence.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Реализация доменного репозитория через JPA.
