@@ -33,4 +33,9 @@ public interface TodoRepository {
      * Найти Todo по статусу, юзеру и категории
      */
     List<Todo> findByUserIdAndCategoryIdAndDeletedAtIsNullAndStatusOrderByIdDesc(Long userId, Long categoryId, TodoStatus todoStatus);
+
+    /**
+     * получить следующий ID
+     */
+    Long getNextTodoId();
 }

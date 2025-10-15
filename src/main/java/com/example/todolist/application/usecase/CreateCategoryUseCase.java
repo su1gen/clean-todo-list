@@ -51,9 +51,11 @@ class CreateCategoryUseCase implements CreateCategory {
             throw new UserNotFoundException(userId);
         }
 
+        Long categoryId = categoryRepository.getNextCategoryId();
+
         // 2. Создать доменную модель (валидация внутри конструктора)
         Category category = new Category(
-                CategoryId.of(null),
+                CategoryId.of(categoryId),
                 Title.of(request.title()),
                 UserId.of(userId),
                 LocalDateTime.now(),

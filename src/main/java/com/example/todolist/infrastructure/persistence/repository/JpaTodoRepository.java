@@ -36,4 +36,7 @@ public interface JpaTodoRepository extends JpaRepository<TodoEntity, Long> {
             @Param("categoryId") Long categoryId,
             @Param("todoStatus") TodoStatus todoStatus
     );
+
+    @Query(value = "SELECT nextval('todos_id_seq')", nativeQuery = true)
+    Long getNextTodoId();
 }

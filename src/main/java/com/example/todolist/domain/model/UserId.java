@@ -10,7 +10,7 @@ public class UserId {
     }
 
     public static UserId of(Long value) {
-        if (value != null && value <= 0) {
+        if (value == null || value <= 0) {
             throw new IllegalArgumentException("UserId must be positive");
         }
 

@@ -55,9 +55,11 @@ class CreateTodoUseCase implements CreateTodo {
                     .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
         }
 
+        Long todoId = todoRepository.getNextTodoId();
+
         // 3. Создать доменную модель (валидация внутри)
         Todo todo = new Todo(
-                TodoId.of(null),
+                TodoId.of(todoId),
                 Title.of(request.title()),
                 request.description(),
                 CategoryId.of(request.categoryId()),

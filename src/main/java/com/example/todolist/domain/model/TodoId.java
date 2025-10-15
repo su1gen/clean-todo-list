@@ -10,7 +10,7 @@ public class TodoId {
     }
 
     public static TodoId of(Long value) {
-        if (value != null && value <= 0) {
+        if (value == null || value <= 0) {
             throw new IllegalArgumentException("TodoId must be positive");
         }
 

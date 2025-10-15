@@ -37,4 +37,9 @@ public interface UserRepository {
      * Проверить существование по email
      */
     boolean existsByEmail(String email);
+
+    /**
+     * получить следующий ID
+     */
+    Long getNextUserId();
 }

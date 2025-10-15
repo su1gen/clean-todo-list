@@ -56,4 +56,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
                 .map(mapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public Long getNextCategoryId() {
+        return jpaRepository.getNextCategoryId();
+    }
 }

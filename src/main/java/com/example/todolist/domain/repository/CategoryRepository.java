@@ -32,4 +32,9 @@ public interface CategoryRepository {
      */
 
     List<Category> findByIdsAndDeletedAtIsNull(Set<Long> ids);
+
+    /**
+     * получить следующий ID
+     */
+    Long getNextCategoryId();
 }

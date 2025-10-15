@@ -48,8 +48,11 @@ class RegisterUserUseCase implements RegisterUser {
         // 2. Шифрование пароля
         HashedPassword hashedPassword = passwordEncoder.encode(password);
 
+        // 2.5. Получаем новый ид пользователя
+        Long nextUserId = userRepository.getNextUserId();
+
         // 3. Создание доменной модели
-        User user = new User(UserId.of(null), Email.of(request.email()), hashedPassword, LocalDateTime.now());
+        User user = new User(UserId.of(nextUserId), Email.of(request.email()), hashedPassword, LocalDateTime.now());
 
         // 4. Сохранение
         User savedUser = userRepository.save(user);

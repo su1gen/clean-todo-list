@@ -31,4 +31,10 @@ public interface JpaCategoryRepository extends JpaRepository<CategoryEntity, Lon
      */
     @Query("SELECT c FROM CategoryEntity c WHERE c.id IN :ids AND c.deletedAt IS NULL")
     List<CategoryEntity> findByIdsAndDeletedAtIsNull(@Param("ids") Set<Long> ids);
+
+    /**
+     * получить следующий ID
+     */
+    @Query(value = "SELECT nextval('categories_id_seq')", nativeQuery = true)
+    Long getNextCategoryId();
 }

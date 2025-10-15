@@ -70,4 +70,9 @@ public class TodoRepositoryImpl implements TodoRepository {
                 .map(mapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public Long getNextTodoId() {
+        return jpaRepository.getNextTodoId();
+    }
 }

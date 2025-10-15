@@ -54,4 +54,9 @@ import java.util.stream.Collectors;
     public boolean existsByEmail(String email) {
         return jpaRepository.existsByEmail(email);
     }
+
+    @Override
+    public Long getNextUserId() {
+        return jpaRepository.getNextUserId();
+    }
 }
