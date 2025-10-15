@@ -3,10 +3,7 @@ package com.example.todolist.application.usecase;
 import com.example.todolist.application.dto.AuthResponse;
 import com.example.todolist.application.dto.RegisterRequest;
 import com.example.todolist.domain.exception.UserAlreadyExistsException;
-import com.example.todolist.domain.model.Email;
-import com.example.todolist.domain.model.Password;
-import com.example.todolist.domain.model.User;
-import com.example.todolist.domain.model.UserId;
+import com.example.todolist.domain.model.*;
 import com.example.todolist.domain.repository.UserRepository;
 import com.example.todolist.domain.service.PasswordEncoder;
 import com.example.todolist.presentation.mapper.AuthResponseMapper;
@@ -49,7 +46,7 @@ class RegisterUserUseCase implements RegisterUser {
         Password password = Password.fromPlainText(request.password());
 
         // 2. Шифрование пароля
-        Password hashedPassword = passwordEncoder.encode(password);
+        HashedPassword hashedPassword = passwordEncoder.encode(password);
 
         // 3. Создание доменной модели
         User user = new User(UserId.of(null), Email.of(request.email()), hashedPassword, LocalDateTime.now());

@@ -17,11 +17,11 @@ import java.util.Objects;
 public class User {
     private final UserId id;
     private final Email email;
-    private final Password password;
+    private final HashedPassword password;
     private final LocalDateTime createdAt;
 
     // Полный конструктор (для восстановления из БД)
-    public User(UserId id, Email email, Password password, LocalDateTime createdAt) {
+    public User(UserId id, Email email, HashedPassword password, LocalDateTime createdAt) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -29,14 +29,14 @@ public class User {
     }
 
     // Бизнес-метод: изменение пароля
-    public User changePassword(Password newPassword) {
+    public User changePassword(HashedPassword newPassword) {
         return new User(this.id, this.email, newPassword, this.createdAt);
     }
 
     // Getters
     public UserId getId() { return id; }
     public Email getEmail() { return email; }
-    public Password getPassword() { return password; }
+    public HashedPassword getPassword() { return password; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     // equals и hashCode по бизнес-ключу (email)

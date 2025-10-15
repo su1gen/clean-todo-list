@@ -1,5 +1,6 @@
 package com.example.todolist.infrastructure.security.encoder;
 
+import com.example.todolist.domain.model.HashedPassword;
 import com.example.todolist.domain.model.Password;
 import com.example.todolist.domain.service.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,17 +11,18 @@ import org.springframework.stereotype.Component;
  * Реализует доменный интерфейс через Spring Security.
  */
 @Component
-public class BCryptPasswordEncoderAdapter implements PasswordEncoder {
+class BCryptPasswordEncoderAdapter implements PasswordEncoder {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override
-    public Password encode(Password rawPassword) {
-        return Password.of(encoder.encode(rawPassword.getValue()));
+    public HashedPassword encode(Password rawPassword) {
+        return HashedPassword.of(encoder.encode(rawPassword.getValue()));
     }
 
     @Override
-    public boolean matches(Password rawPassword, Password encodedPassword) {
-        return encoder.matches(rawPassword.getValue(), encodedPassword.getValue());
+    public boolean matches(Password rawPassword, HashedPassword encodedPassword) {
+        System.out.println("RAW: " + rawPassword + " Hashed" + encodedPassword);
+        return encoder.matches(rawPassword.getValue(), encodedPassword.hash());
     }
 }

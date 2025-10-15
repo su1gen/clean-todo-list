@@ -3,9 +3,10 @@ package com.example.todolist.domain.model;
 import java.util.Objects;
 
 public class CategoryId {
+
     private final Long value;
 
-    public CategoryId(Long value) {
+    private CategoryId(Long value) {
         this.value = value;
     }
 

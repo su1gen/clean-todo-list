@@ -5,7 +5,7 @@ import java.util.Objects;
 public class TodoId {
     private final Long value;
 
-    public TodoId(Long value) {
+    private TodoId(Long value) {
         this.value = value;
     }
 

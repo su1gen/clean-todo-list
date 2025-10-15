@@ -1,5 +1,6 @@
 package com.example.todolist.domain.service;
 
+import com.example.todolist.domain.model.HashedPassword;
 import com.example.todolist.domain.model.Password;
 
 /**
@@ -11,10 +12,10 @@ public interface PasswordEncoder {
     /**
      * Зашифровать пароль
      */
-    Password encode(Password rawPassword);
+    HashedPassword encode(Password rawPassword);
 
     /**
      * Проверить соответствие пароля хешу
      */
-    boolean matches(Password rawPassword, Password encodedPassword);
+    boolean matches(Password rawPassword, HashedPassword encodedPassword);
 }

@@ -3,7 +3,7 @@ package com.example.todolist.domain.model;
 public class Title {
     private final String value;
 
-    public Title(String value) {
+    private Title(String value) {
         this.value = value;
     }
 

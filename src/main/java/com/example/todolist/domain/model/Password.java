@@ -21,13 +21,6 @@ public class Password {
         return new Password(plainPassword);
     }
 
-    public static Password of(String hash) {
-        if (hash == null || hash.isEmpty()) {
-            throw new IllegalArgumentException("Password hash cannot be empty");
-        }
-        return new Password(hash);
-    }
-
     public String getValue() {
         return value;
     }
