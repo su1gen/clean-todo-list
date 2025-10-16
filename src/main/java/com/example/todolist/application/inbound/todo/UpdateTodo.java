@@ -1,8 +1,8 @@
 package com.example.todolist.application.inbound.todo;
 
-import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.application.dto.UpdateTodoDto;
+import com.example.todolist.domain.model.Todo;
 
 public interface UpdateTodo {
-    TodoResponse execute(Long todoId, UpdateTodoDto request, Long userId);
+    Todo execute(UpdateTodoDto updateTodoDto);
 }

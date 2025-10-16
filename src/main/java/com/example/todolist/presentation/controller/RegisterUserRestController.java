@@ -1,8 +1,9 @@
 package com.example.todolist.presentation.controller;
 
 
-import com.example.todolist.application.dto.AuthResponse;
-import com.example.todolist.application.dto.RegisterRequest;
+import com.example.todolist.domain.model.User;
+import com.example.todolist.presentation.webmodels.AuthResponseWebModel;
+import com.example.todolist.presentation.webmodels.RegisterWebModel;
 import com.example.todolist.application.inbound.user.RegisterUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,10 @@ class RegisterUserRestController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
-        var response = registerUser.execute(registerRequest);
+    public ResponseEntity<AuthResponseWebModel> register(@RequestBody RegisterWebModel registerWebModel) {
+        User user = registerUser.execute(registerWebModel);
+
+        AuthResponseWebModel response = AuthResponseWebModel.from(user);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

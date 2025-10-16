@@ -1,6 +1,6 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.LoginRequest;
+import com.example.todolist.presentation.webmodels.LoginWebModel;
 import com.example.todolist.application.dto.TokenDto;
 import com.example.todolist.application.inbound.user.LoginUser;
 import com.example.todolist.infrastructure.security.jwt.JwtService;
@@ -30,12 +30,12 @@ class LoginUserCase implements LoginUser {
     }
 
     @Override
-    public TokenDto execute(LoginRequest loginRequest) {
+    public TokenDto execute(LoginWebModel loginWebModel) {
         try {
             authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
+                    new UsernamePasswordAuthenticationToken(loginWebModel.email(), loginWebModel.password())
             );
-            String token = jwtService.generateToken(loginRequest.email());
+            String token = jwtService.generateToken(loginWebModel.email());
             long expiresAt = Instant.now().toEpochMilli() + Long.parseLong(
                     String.valueOf(jwtService.getExpirationMs())
             );

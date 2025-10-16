@@ -1,9 +1,9 @@
 package com.example.todolist.application.inbound.todo;
 
-import com.example.todolist.application.dto.TodoWithCategoryResponse;
+import com.example.todolist.application.dto.TodoWithCategoryDto;
 
 import java.util.List;
 
 public interface GetTodayTodos {
-    List<TodoWithCategoryResponse> execute(Long userId);
+    List<TodoWithCategoryDto> execute(Long userId);
 }

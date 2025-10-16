@@ -1,7 +1,8 @@
 package com.example.todolist.presentation.controller;
 
 
-import com.example.todolist.application.dto.CategoryResponse;
+import com.example.todolist.domain.model.Category;
+import com.example.todolist.presentation.webmodels.CategoryResponseWebModel;
 import com.example.todolist.application.inbound.category.GetCategories;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,16 @@ class GetCategoriesRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getCategories(
+    public ResponseEntity<List<CategoryResponseWebModel>> getCategories(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        var categories = getCategories.execute(userDetails.getUserId());
+        List<Category> categories = getCategories.execute(userDetails.getUserId());
 
-        return ResponseEntity.ok(categories);
+        List<CategoryResponseWebModel> response = categories
+                .stream()
+                .map(CategoryResponseWebModel::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 }

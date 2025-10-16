@@ -1,44 +1,45 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.CategoryWithTodosResponse;
-import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.dto.CategoryWithTodosDto;
+import com.example.todolist.application.dto.GetCategoryTodosDto;
 import com.example.todolist.application.inbound.todo.GetCategoryTodos;
 import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
+import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
+import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.application.outbound.TodoRepository;
-import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 class GetCategoryTodosUseCase implements GetCategoryTodos {
-    private final TodoRepository todoRepository;
+    private final ActiveTodosByStatusAndCategoryExtractor todosByStatusAndCategoryExtractor;
     private final ActiveCategoryExtractor activeCategoryExtractor;
-    private final TodoResponseMapper todoResponseMapper;
 
-    GetCategoryTodosUseCase(TodoRepository todoRepository, ActiveCategoryExtractor activeCategoryExtractor, TodoResponseMapper todoResponseMapper) {
-        this.todoRepository = todoRepository;
+    GetCategoryTodosUseCase(
+            ActiveTodosByStatusAndCategoryExtractor todosByStatusAndCategoryExtractor,
+            ActiveCategoryExtractor activeCategoryExtractor) {
+        this.todosByStatusAndCategoryExtractor = todosByStatusAndCategoryExtractor;
         this.activeCategoryExtractor = activeCategoryExtractor;
-        this.todoResponseMapper = todoResponseMapper;
     }
 
     @Override
-    public CategoryWithTodosResponse execute(Long userId, Long categoryId, String statusUrlParam) {
-        var status = TodoStatus.fromUrlParam(statusUrlParam);
-        var category = activeCategoryExtractor.getActiveCategoryById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+    public CategoryWithTodosDto execute(GetCategoryTodosDto getCategoryTodosDto) {
+        TodoStatus status = TodoStatus.fromUrlParam(getCategoryTodosDto.status());
+        Category category = activeCategoryExtractor.getActiveCategoryById(getCategoryTodosDto.categoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(getCategoryTodosDto.categoryId()));
 
-        var todos = todoRepository.findByUserIdAndCategoryIdAndDeletedAtIsNullAndStatusOrderByIdDesc(userId, categoryId, status);
+        List<Todo> todos = todosByStatusAndCategoryExtractor.getUserTodosByCategoryAndStatus(
+                getCategoryTodosDto.userId(),
+                getCategoryTodosDto.categoryId(),
+                status
+        );
 
-        List<TodoResponse> todoResponseList = todos.stream()
-                .map(todoResponseMapper::toResponse)
-                .toList();
-
-        return new CategoryWithTodosResponse(
-                category.getTitle().getValue(),
-                todoResponseList
+        return new CategoryWithTodosDto(
+                category,
+                todos
         );
     }
 }

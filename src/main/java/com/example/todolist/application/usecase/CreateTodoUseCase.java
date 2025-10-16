@@ -1,15 +1,14 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.dto.CreateTodoDto;
-import com.example.todolist.application.dto.TodoResponse;
 import com.example.todolist.application.inbound.todo.CreateTodo;
 import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
+import com.example.todolist.application.outbound.todo.TodoNextIdExtractor;
+import com.example.todolist.application.outbound.todo.TodoPersister;
+import com.example.todolist.application.outbound.user.UserByIdExtractor;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.*;
-import com.example.todolist.application.outbound.TodoRepository;
-import com.example.todolist.application.outbound.UserRepository;
-import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -25,52 +24,52 @@ import java.time.LocalDateTime;
 @Component
 class CreateTodoUseCase implements CreateTodo {
 
-    private final TodoRepository todoRepository;
-    private final UserRepository userRepository;
+    private final TodoNextIdExtractor todoNextIdExtractor;
+    private final UserByIdExtractor userByIdExtractor;
     private final ActiveCategoryExtractor activeCategoryExtractor;
-    private final TodoResponseMapper todoResponseMapper;
+    private final TodoPersister todoPersister;
 
-    CreateTodoUseCase(TodoRepository todoRepository, UserRepository userRepository, ActiveCategoryExtractor activeCategoryExtractor, TodoResponseMapper todoResponseMapper) {
-        this.todoRepository = todoRepository;
-        this.userRepository = userRepository;
+    CreateTodoUseCase(TodoNextIdExtractor todoNextIdExtractor,
+                      UserByIdExtractor userByIdExtractor,
+                      ActiveCategoryExtractor activeCategoryExtractor,
+                      TodoPersister todoPersister) {
+        this.todoNextIdExtractor = todoNextIdExtractor;
+        this.userByIdExtractor = userByIdExtractor;
         this.activeCategoryExtractor = activeCategoryExtractor;
-        this.todoResponseMapper = todoResponseMapper;
+        this.todoPersister = todoPersister;
     }
 
 
     @Override
-    public TodoResponse execute(CreateTodoDto request, Long userId) {
+    public Todo execute(CreateTodoDto createTodoDto) {
         // 1. Проверить существование пользователя
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new UserNotFoundException(userId);
+        if (userByIdExtractor.findById(createTodoDto.userId()).isEmpty()) {
+            throw new UserNotFoundException(createTodoDto.userId());
         }
 
         // 2. Если указана категория, проверить её существование и принадлежность пользователю
-        if (request.categoryId() != null) {
-            activeCategoryExtractor.getActiveCategoryById(request.categoryId())
-                    .filter(category -> category.belongsToUser(userId))
-                    .orElseThrow(() -> new CategoryNotFoundException(request.categoryId()));
+        if (createTodoDto.categoryId() != null) {
+            activeCategoryExtractor.getActiveCategoryById(createTodoDto.categoryId())
+                    .filter(category -> category.belongsToUser(createTodoDto.userId()))
+                    .orElseThrow(() -> new CategoryNotFoundException(createTodoDto.categoryId()));
         }
 
-        Long todoId = todoRepository.getNextTodoId();
+        Long todoId = todoNextIdExtractor.getNextTodoId();
 
         // 3. Создать доменную модель (валидация внутри)
         Todo todo = new Todo(
                 TodoId.of(todoId),
-                Title.of(request.title()),
-                request.description(),
-                CategoryId.of(request.categoryId()),
-                UserId.of(userId),
+                Title.of(createTodoDto.title()),
+                createTodoDto.description(),
+                CategoryId.of(createTodoDto.categoryId()),
+                UserId.of(createTodoDto.userId()),
                 TodoStatus.CREATED,
                 LocalDateTime.now(),
                 null,
-                request.plannedAt()
+                createTodoDto.plannedAt()
         );
 
         // 4. Сохранить
-        Todo savedTodo = todoRepository.save(todo);
-
-        // 5. Вернуть ответ
-        return todoResponseMapper.toResponse(savedTodo);
+        return todoPersister.persist(todo);
     }
 }

@@ -2,7 +2,9 @@ package com.example.todolist.presentation.controller;
 
 
 import com.example.todolist.application.dto.CreateTodoDto;
-import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.domain.model.Todo;
+import com.example.todolist.presentation.webmodels.CreateTodoWebModel;
+import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
 import com.example.todolist.application.inbound.todo.CreateTodo;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +25,16 @@ class CreateTodoRestController {
 
 
     @PostMapping
-    public ResponseEntity<TodoResponse> createTodo(
-            @RequestBody CreateTodoDto createTodoDto,
+    public ResponseEntity<TodoResponseWebModel> createTodo(
+            @RequestBody CreateTodoWebModel createTodoWebModel,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        final TodoResponse createdTask = createTodo.execute(createTodoDto, userDetails.getUserId());
+        CreateTodoDto createTodoDto = createTodoWebModel.toDto(userDetails.getUserId());
 
-        return ResponseEntity.ok(createdTask);
+        Todo createdTodo = createTodo.execute(createTodoDto);
+
+        final TodoResponseWebModel response = TodoResponseWebModel.from(createdTodo);
+
+        return ResponseEntity.ok(response);
     }
 }

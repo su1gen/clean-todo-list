@@ -1,7 +1,7 @@
 package com.example.todolist.infrastructure.security.userdetails;
 
+import com.example.todolist.application.outbound.user.UserByEmailExtractor;
 import com.example.todolist.domain.model.User;
-import com.example.todolist.application.outbound.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,16 +17,16 @@ import java.util.List;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserByEmailExtractor userByEmailExtractor;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(UserByEmailExtractor userByEmailExtractor) {
+        this.userByEmailExtractor = userByEmailExtractor;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Загружаем доменную модель
-        User user = userRepository.findByEmail(email)
+        User user = userByEmailExtractor.findByEmail(email)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found: " + email)
                 );

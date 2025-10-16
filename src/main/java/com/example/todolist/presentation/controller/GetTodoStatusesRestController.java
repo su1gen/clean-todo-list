@@ -1,6 +1,7 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.TodoStatusResponse;
+import com.example.todolist.application.dto.TodoStatusDto;
+import com.example.todolist.presentation.webmodels.TodoStatusResponseWebModel;
 import com.example.todolist.application.inbound.todo.GetTodoStatuses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +20,13 @@ class GetTodoStatusesRestController {
     }
 
     @GetMapping("/statuses")
-    public ResponseEntity<List<TodoStatusResponse>> getStatuses() {
-        var statuses = getTodoStatuses.execute();
+    public ResponseEntity<List<TodoStatusResponseWebModel>> getStatuses() {
+        List<TodoStatusDto> statuses = getTodoStatuses.execute();
 
-        return ResponseEntity.ok(statuses);
+        List<TodoStatusResponseWebModel> response = statuses.stream()
+                .map(TodoStatusResponseWebModel::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 }

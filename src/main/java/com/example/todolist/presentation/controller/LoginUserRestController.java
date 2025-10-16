@@ -1,6 +1,6 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.LoginRequest;
+import com.example.todolist.presentation.webmodels.LoginWebModel;
 import com.example.todolist.application.inbound.user.LoginUser;
 import com.example.todolist.infrastructure.security.jwt.JwtService;
 import org.springframework.http.HttpHeaders;
@@ -23,8 +23,8 @@ public class LoginUserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        var tokenData = loginUser.execute(loginRequest);
+    public ResponseEntity<?> login(@RequestBody LoginWebModel loginWebModel) {
+        var tokenData = loginUser.execute(loginWebModel);
 
         ResponseCookie cookie = ResponseCookie.from(jwtService.getCookieName(), tokenData.token())
                 .httpOnly(true)

@@ -1,38 +1,30 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.CategoryResponse;
-import com.example.todolist.application.dto.TodoWithCategoryResponse;
+import com.example.todolist.application.dto.TodoWithCategoryDto;
 import com.example.todolist.application.inbound.todo.GetTodayTodos;
 import com.example.todolist.application.outbound.category.CategoriesExtractor;
+import com.example.todolist.application.outbound.todo.TodayActiveTodosExtractor;
 import com.example.todolist.domain.model.Category;
-import com.example.todolist.application.outbound.TodoRepository;
-import com.example.todolist.presentation.mapper.CategoryResponseMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 class GetTodayTodosUseCase implements GetTodayTodos {
-    private final TodoRepository todoRepository;
+    private final TodayActiveTodosExtractor todayActiveTodosExtractor;
     private final CategoriesExtractor categoriesExtractor;
-    private final CategoryResponseMapper categoryResponseMapper;
 
-    GetTodayTodosUseCase(TodoRepository todoRepository, CategoriesExtractor categoriesExtractor, CategoryResponseMapper categoryResponseMapper) {
-        this.todoRepository = todoRepository;
+    GetTodayTodosUseCase(TodayActiveTodosExtractor todayActiveTodosExtractor, CategoriesExtractor categoriesExtractor) {
+        this.todayActiveTodosExtractor = todayActiveTodosExtractor;
         this.categoriesExtractor = categoriesExtractor;
-        this.categoryResponseMapper = categoryResponseMapper;
     }
 
     @Override
-    public List<TodoWithCategoryResponse> execute(Long userId) {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1).minusSeconds(1);
+    public List<TodoWithCategoryDto> execute(Long userId) {
+        var todos = todayActiveTodosExtractor.getUserTodayTodos(userId);
 
-        var todos = todoRepository.findByUserIdAndDeletedAtIsNullAndPlannedAtBetweenOrderByIdDesc(userId, startOfDay, endOfDay);
         Set<Long> categoryIds = todos.stream()
                 .map(item -> item.getCategoryId().getValue())
                 .filter(Objects::nonNull)
@@ -51,17 +43,16 @@ class GetTodayTodosUseCase implements GetTodayTodos {
         return todos
                 .stream()
                 .map(todo -> {
-                    CategoryResponse categoryResponse = Optional.ofNullable(todo.getCategoryId().getValue())
+                    Category category = Optional.ofNullable(todo.getCategoryId().getValue())
                             .map(categoryMap::get)
-                            .map(categoryResponseMapper::toResponse)
                             .orElse(null);
 
-                    return new TodoWithCategoryResponse(
+                    return new TodoWithCategoryDto(
                             todo.getId().getValue(),
                             todo.getTitle().getValue(),
                             todo.getDescription(),
-                            categoryResponse,
-                            todo.getStatus().getTitle(),
+                            category,
+                            todo.getStatus(),
                             todo.getCreatedAt(),
                             todo.getPlannedAt()
                     );

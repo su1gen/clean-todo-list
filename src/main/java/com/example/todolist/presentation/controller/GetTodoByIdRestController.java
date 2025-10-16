@@ -1,8 +1,10 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.dto.GetTodoDto;
 import com.example.todolist.application.inbound.todo.GetTodo;
+import com.example.todolist.domain.model.Todo;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
+import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +22,16 @@ class GetTodoByIdRestController {
     }
 
     @GetMapping("/{todoId}")
-    public ResponseEntity<TodoResponse> getTodo(
+    public ResponseEntity<TodoResponseWebModel> getTodo(
             @PathVariable Long todoId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        final var todo = getTodo.execute(todoId, userDetails.getUserId());
+        GetTodoDto getTodoDto = new GetTodoDto(todoId, userDetails.getUserId());
 
-        return ResponseEntity.ok(todo);
+        Todo todo = getTodo.execute(getTodoDto);
+
+        TodoResponseWebModel response = TodoResponseWebModel.from(todo);
+
+        return ResponseEntity.ok(response);
     }
 }

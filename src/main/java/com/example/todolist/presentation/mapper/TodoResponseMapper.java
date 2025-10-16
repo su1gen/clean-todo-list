@@ -1,20 +1,20 @@
 package com.example.todolist.presentation.mapper;
 
-import com.example.todolist.application.dto.TodoResponse;
-import com.example.todolist.application.dto.TodoStatusResponse;
+import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
+import com.example.todolist.presentation.webmodels.TodoStatusResponseWebModel;
 import com.example.todolist.domain.model.Todo;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TodoResponseMapper {
 
-    public TodoResponse toResponse(Todo todo) {
-        return new TodoResponse(
+    public TodoResponseWebModel toResponse(Todo todo) {
+        return new TodoResponseWebModel(
                 todo.getId().getValue(),
                 todo.getTitle().getValue(),
                 todo.getDescription(),
                 todo.getCategoryId().getValue(),
-                new TodoStatusResponse(
+                new TodoStatusResponseWebModel(
                         todo.getStatus().getId(),
                         todo.getStatus().getTitle()
                 ),

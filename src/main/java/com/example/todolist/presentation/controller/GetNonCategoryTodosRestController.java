@@ -1,6 +1,8 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.dto.GetNonCategoryTodosDto;
+import com.example.todolist.domain.model.Todo;
+import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
 import com.example.todolist.application.inbound.todo.GetNonCategoryTodos;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +24,18 @@ class GetNonCategoryTodosRestController {
     }
 
     @GetMapping("/without-category")
-    public ResponseEntity<List<TodoResponse>> getWithoutCategoryTodos(
+    public ResponseEntity<List<TodoResponseWebModel>> getWithoutCategoryTodos(
             @RequestParam(defaultValue = "") String status,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        var todos = getNonCategoryTodos.execute(userDetails.getUserId(), status);
+        GetNonCategoryTodosDto getNonCategoryTodosDto = new GetNonCategoryTodosDto(status, userDetails.getUserId());
 
-        return ResponseEntity.ok(todos);
+        List<Todo> todos = getNonCategoryTodos.execute(getNonCategoryTodosDto);
+
+        List<TodoResponseWebModel> response = todos.stream()
+                .map(TodoResponseWebModel::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 }

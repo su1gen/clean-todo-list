@@ -1,6 +1,6 @@
-package com.example.todolist.application.dto;
+package com.example.todolist.presentation.webmodels;
 
-public record LoginRequest(
+public record LoginWebModel(
 //        @NotBlank(message = "Email не может быть пустым")
         String email,
 

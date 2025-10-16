@@ -1,8 +1,8 @@
 package com.example.todolist.application.inbound.user;
 
-import com.example.todolist.application.dto.AuthResponse;
-import com.example.todolist.application.dto.RegisterRequest;
+import com.example.todolist.domain.model.User;
+import com.example.todolist.presentation.webmodels.RegisterWebModel;
 
 public interface RegisterUser {
-    AuthResponse execute(RegisterRequest request);
+    User execute(RegisterWebModel registerWebModel);
 }

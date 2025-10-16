@@ -1,13 +1,11 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.CategoryResponse;
-import com.example.todolist.application.dto.TodoWithCategoryResponse;
+import com.example.todolist.application.dto.TodoWithCategoryDto;
 import com.example.todolist.application.inbound.todo.GetInboxTodos;
 import com.example.todolist.application.outbound.category.CategoriesExtractor;
+import com.example.todolist.application.outbound.todo.ActiveTodosByStatusExtractor;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.application.outbound.TodoRepository;
-import com.example.todolist.presentation.mapper.CategoryResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -16,19 +14,17 @@ import java.util.stream.Collectors;
 
 @Component
 class GetInboxTodosUseCase implements GetInboxTodos {
-    private final TodoRepository todoRepository;
+    private final ActiveTodosByStatusExtractor todosByStatusExtractor;
     private final CategoriesExtractor categoriesExtractor;
-    private final CategoryResponseMapper categoryResponseMapper;
 
-    GetInboxTodosUseCase(TodoRepository todoRepository, CategoriesExtractor categoriesExtractor, CategoryResponseMapper categoryResponseMapper) {
-        this.todoRepository = todoRepository;
+    GetInboxTodosUseCase(ActiveTodosByStatusExtractor todosByStatusExtractor, CategoriesExtractor categoriesExtractor) {
+        this.todosByStatusExtractor = todosByStatusExtractor;
         this.categoriesExtractor = categoriesExtractor;
-        this.categoryResponseMapper = categoryResponseMapper;
     }
 
     @Override
-    public List<TodoWithCategoryResponse> execute(Long userId) {
-        var todos = todoRepository.findByUserIdAndDeletedAtIsNullAndStatusOrderByIdDesc(userId, TodoStatus.CREATED);
+    public List<TodoWithCategoryDto> execute(Long userId) {
+        var todos = todosByStatusExtractor.getUserTodosByStatus(userId, TodoStatus.CREATED);
 
         Set<Long> categoryIds = todos.stream()
                 .map(item -> item.getCategoryId().getValue())
@@ -38,27 +34,26 @@ class GetInboxTodosUseCase implements GetInboxTodos {
         Map<Long, Category> categoryMap = categoryIds.isEmpty()
                 ? Map.of()
                 : categoriesExtractor.getCategoriesByIds(categoryIds)
-                .stream()
-                .collect(Collectors.toMap(
-                        item -> item.getId().getValue(),
-                        Function.identity())
-                );
+                    .stream()
+                    .collect(Collectors.toMap(
+                            item -> item.getId().getValue(),
+                            Function.identity())
+                    );
 
 
         return todos
                 .stream()
                 .map(todo -> {
-                    CategoryResponse categoryResponse = Optional.ofNullable(todo.getCategoryId().getValue())
+                    Category category = Optional.ofNullable(todo.getCategoryId().getValue())
                             .map(categoryMap::get)
-                            .map(categoryResponseMapper::toResponse)
                             .orElse(null);
 
-                    return new TodoWithCategoryResponse(
+                    return new TodoWithCategoryDto(
                             todo.getId().getValue(),
                             todo.getTitle().getValue(),
                             todo.getDescription(),
-                            categoryResponse,
-                            todo.getStatus().getTitle(),
+                            category,
+                            todo.getStatus(),
                             todo.getCreatedAt(),
                             todo.getPlannedAt()
                     );

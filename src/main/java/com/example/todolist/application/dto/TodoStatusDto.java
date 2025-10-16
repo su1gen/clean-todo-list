@@ -1,7 +1,7 @@
 package com.example.todolist.application.dto;
 
-public record CategoryResponse(
-        Long id,
+public record TodoStatusDto(
+        int id,
         String title
 ) {
 }

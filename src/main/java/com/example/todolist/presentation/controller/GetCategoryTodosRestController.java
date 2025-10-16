@@ -1,6 +1,8 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.CategoryWithTodosResponse;
+import com.example.todolist.application.dto.CategoryWithTodosDto;
+import com.example.todolist.presentation.webmodels.CategoryWithTodosResponseWebModel;
+import com.example.todolist.application.dto.GetCategoryTodosDto;
 import com.example.todolist.application.inbound.todo.GetCategoryTodos;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +20,15 @@ class GetCategoryTodosRestController {
     }
 
     @GetMapping("/todos/{categoryId}")
-    public ResponseEntity<CategoryWithTodosResponse> getCategoryTodos(
+    public ResponseEntity<CategoryWithTodosResponseWebModel> getCategoryTodos(
             @PathVariable Long categoryId,
             @RequestParam(defaultValue = "") String status,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        var todos = getCategoryTodos.execute(userDetails.getUserId(), categoryId, status);
+        GetCategoryTodosDto getCategoryTodosDto = new GetCategoryTodosDto(status, categoryId, userDetails.getUserId());
 
-        return ResponseEntity.ok(todos);
+        CategoryWithTodosDto categoryWithTodosDto = getCategoryTodos.execute(getCategoryTodosDto);
+
+        return ResponseEntity.ok(CategoryWithTodosResponseWebModel.from(categoryWithTodosDto));
     }
 }

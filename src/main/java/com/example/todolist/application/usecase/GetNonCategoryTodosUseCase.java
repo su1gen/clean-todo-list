@@ -1,33 +1,29 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.dto.GetNonCategoryTodosDto;
 import com.example.todolist.application.inbound.todo.GetNonCategoryTodos;
+import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
+import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.application.outbound.TodoRepository;
-import com.example.todolist.presentation.mapper.TodoResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 class GetNonCategoryTodosUseCase implements GetNonCategoryTodos {
-    private final TodoRepository todoRepository;
-    private final TodoResponseMapper todoResponseMapper;
+    private final ActiveTodosByStatusAndCategoryExtractor activeTodosByStatusAndCategoryExtractor;
 
-    GetNonCategoryTodosUseCase(TodoRepository todoRepository, TodoResponseMapper todoResponseMapper) {
-        this.todoRepository = todoRepository;
-        this.todoResponseMapper = todoResponseMapper;
+    GetNonCategoryTodosUseCase(ActiveTodosByStatusAndCategoryExtractor activeTodosByStatusAndCategoryExtractor) {
+        this.activeTodosByStatusAndCategoryExtractor = activeTodosByStatusAndCategoryExtractor;
     }
 
     @Override
-    public List<TodoResponse> execute(Long userId, String statusUrlParam) {
-        var status = TodoStatus.fromUrlParam(statusUrlParam);
+    public List<Todo> execute(GetNonCategoryTodosDto getNonCategoryTodosDto) {
+        TodoStatus status = TodoStatus.fromUrlParam(getNonCategoryTodosDto.status());
 
-        var todos = todoRepository.findByUserIdAndCategoryIdAndDeletedAtIsNullAndStatusOrderByIdDesc(userId, null, status);
-
-        return todos
-                .stream()
-                .map(todoResponseMapper::toResponse)
-                .toList();
+        return activeTodosByStatusAndCategoryExtractor.getUserTodosByCategoryAndStatus(
+                getNonCategoryTodosDto.userId(),
+                null,
+                status);
     }
 }

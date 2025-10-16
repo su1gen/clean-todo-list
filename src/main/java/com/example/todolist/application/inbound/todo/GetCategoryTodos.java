@@ -1,7 +1,8 @@
 package com.example.todolist.application.inbound.todo;
 
-import com.example.todolist.application.dto.CategoryWithTodosResponse;
+import com.example.todolist.application.dto.CategoryWithTodosDto;
+import com.example.todolist.application.dto.GetCategoryTodosDto;
 
 public interface GetCategoryTodos {
-    CategoryWithTodosResponse execute(Long userId, Long categoryId, String status);
+    CategoryWithTodosDto execute(GetCategoryTodosDto getCategoryTodosDto);
 }

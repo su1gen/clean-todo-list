@@ -1,10 +1,10 @@
-package com.example.todolist.application.dto;
+package com.example.todolist.presentation.webmodels;
 
 /**
  * DTO для регистрации пользователя.
  * Используется на границе системы (от клиента к use case).
  */
-public record RegisterRequest(
+public record RegisterWebModel(
 
 //        @NotBlank(message = "Email не может быть пустым")
 //        @Email(message = "Некорректный формат email")

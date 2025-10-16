@@ -1,17 +1,15 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.CategoryResponse;
 import com.example.todolist.application.dto.CreateCategoryDto;
 import com.example.todolist.application.inbound.category.CreateCategory;
 import com.example.todolist.application.outbound.category.CategoryNextIdExtractor;
 import com.example.todolist.application.outbound.category.CategoryPersister;
-import com.example.todolist.application.outbound.UserRepository;
+import com.example.todolist.application.outbound.user.UserByIdExtractor;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.model.CategoryId;
 import com.example.todolist.domain.model.Title;
 import com.example.todolist.domain.model.UserId;
-import com.example.todolist.presentation.mapper.CategoryResponseMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -29,30 +27,26 @@ class CreateCategoryUseCase implements CreateCategory {
 
     private final CategoryPersister categoryPersister;
     private final CategoryNextIdExtractor categoryNextIdExtractor;
-    private final UserRepository userRepository;
-    private final CategoryResponseMapper categoryResponseMapper;
+    private final UserByIdExtractor userByIdExtractor;
 
     CreateCategoryUseCase(
-            CategoryPersister categoryPersister, CategoryNextIdExtractor categoryNextIdExtractor,
-            UserRepository userRepository, CategoryResponseMapper categoryResponseMapper
+            CategoryPersister categoryPersister,
+            CategoryNextIdExtractor categoryNextIdExtractor,
+            UserByIdExtractor userByIdExtractor
     ) {
         this.categoryPersister = categoryPersister;
         this.categoryNextIdExtractor = categoryNextIdExtractor;
-        this.userRepository = userRepository;
-        this.categoryResponseMapper = categoryResponseMapper;
+        this.userByIdExtractor = userByIdExtractor;
     }
 
     /**
      * Выполнить создание категории
-     *
-     * @param request данные категории
-     * @param userId  ID текущего пользователя (из JWT)
      */
     @Override
-    public CategoryResponse execute(CreateCategoryDto request, Long userId) {
+    public Category execute(CreateCategoryDto createCategoryDto) {
         // 1. Проверить существование пользователя
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new UserNotFoundException(userId);
+        if (userByIdExtractor.findById(createCategoryDto.userId()).isEmpty()) {
+            throw new UserNotFoundException(createCategoryDto.userId());
         }
 
         Long categoryId = categoryNextIdExtractor.getNextCategoryId();
@@ -60,16 +54,13 @@ class CreateCategoryUseCase implements CreateCategory {
         // 2. Создать доменную модель (валидация внутри конструктора)
         Category category = new Category(
                 CategoryId.of(categoryId),
-                Title.of(request.title()),
-                UserId.of(userId),
+                Title.of(createCategoryDto.title()),
+                UserId.of(createCategoryDto.userId()),
                 LocalDateTime.now(),
                 null
         );
 
         // 3. Сохранить
-        Category savedCategory = categoryPersister.persist(category);
-
-        // 4. Преобразовать в DTO
-        return categoryResponseMapper.toResponse(savedCategory);
+        return categoryPersister.persist(category);
     }
 }

@@ -1,8 +1,8 @@
 package com.example.todolist.application.inbound.category;
 
-import com.example.todolist.application.dto.CategoryResponse;
 import com.example.todolist.application.dto.CreateCategoryDto;
+import com.example.todolist.domain.model.Category;
 
 public interface CreateCategory {
-    CategoryResponse execute(CreateCategoryDto request, Long userId);
+    Category execute(CreateCategoryDto createCategoryDto);
 }

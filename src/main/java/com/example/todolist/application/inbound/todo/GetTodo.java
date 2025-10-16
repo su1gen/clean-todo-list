@@ -1,7 +1,8 @@
 package com.example.todolist.application.inbound.todo;
 
-import com.example.todolist.application.dto.TodoResponse;
+import com.example.todolist.application.dto.GetTodoDto;
+import com.example.todolist.domain.model.Todo;
 
 public interface GetTodo {
-    TodoResponse execute(Long todoId, Long userId);
+    Todo execute(GetTodoDto getTodoDto);
 }

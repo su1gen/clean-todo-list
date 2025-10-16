@@ -1,13 +1,13 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.AuthResponse;
-import com.example.todolist.application.dto.RegisterRequest;
 import com.example.todolist.application.inbound.user.RegisterUser;
+import com.example.todolist.application.outbound.user.UserByEmailExister;
+import com.example.todolist.application.outbound.user.UserNextIdExtractor;
+import com.example.todolist.application.outbound.user.UserPersister;
 import com.example.todolist.domain.exception.UserAlreadyExistsException;
 import com.example.todolist.domain.model.*;
-import com.example.todolist.application.outbound.UserRepository;
 import com.example.todolist.domain.service.PasswordEncoder;
-import com.example.todolist.presentation.mapper.AuthResponseMapper;
+import com.example.todolist.presentation.webmodels.RegisterWebModel;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -23,42 +23,41 @@ import java.time.LocalDateTime;
 @Component
 class RegisterUserUseCase implements RegisterUser {
 
-    private final UserRepository userRepository;
+    private final UserPersister userPersister;
+    private final UserByEmailExister userByEmailExister;
+    private final UserNextIdExtractor userNextIdExtractor;
     private final PasswordEncoder passwordEncoder;
-    private final AuthResponseMapper authResponseMapper;
 
-    RegisterUserUseCase(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            AuthResponseMapper authResponseMapper
-    ) {
-        this.userRepository = userRepository;
+    RegisterUserUseCase(UserPersister userPersister, UserByEmailExister userByEmailExister, UserNextIdExtractor userNextIdExtractor, PasswordEncoder passwordEncoder) {
+        this.userPersister = userPersister;
+        this.userByEmailExister = userByEmailExister;
+        this.userNextIdExtractor = userNextIdExtractor;
         this.passwordEncoder = passwordEncoder;
-        this.authResponseMapper = authResponseMapper;
     }
 
+
     @Override
-    public AuthResponse execute(RegisterRequest request) {
+    public User execute(RegisterWebModel registerWebModel) {
         // 1. Проверка уникальности email
-        if (userRepository.existsByEmail(request.email())) {
-            throw new UserAlreadyExistsException(request.email());
+        if (userByEmailExister.existsByEmail(registerWebModel.email())) {
+            throw new UserAlreadyExistsException(registerWebModel.email());
         }
 
-        Password password = Password.fromPlainText(request.password());
+        Password password = Password.fromPlainText(registerWebModel.password());
 
         // 2. Шифрование пароля
         HashedPassword hashedPassword = passwordEncoder.encode(password);
 
         // 2.5. Получаем новый ид пользователя
-        Long nextUserId = userRepository.getNextUserId();
+        Long nextUserId = userNextIdExtractor.getNextUserId();
 
         // 3. Создание доменной модели
-        User user = new User(UserId.of(nextUserId), Email.of(request.email()), hashedPassword, LocalDateTime.now());
+        User user = new User(
+                UserId.of(nextUserId),
+                Email.of(registerWebModel.email()), hashedPassword, LocalDateTime.now()
+        );
 
         // 4. Сохранение
-        User savedUser = userRepository.save(user);
-
-        // 5. Возврат ответа
-        return authResponseMapper.toResponse(savedUser);
+        return userPersister.persist(user);
     }
 }
