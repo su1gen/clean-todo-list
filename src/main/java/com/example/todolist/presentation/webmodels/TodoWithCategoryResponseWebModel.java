@@ -8,7 +8,7 @@ public record TodoWithCategoryResponseWebModel(
         Long id,
         String title,
         String description,
-        CategoryResponseWebModel category,
+        String categoryTitle,
         String statusTitle,
         LocalDateTime createdAt,
         LocalDateTime plannedAt
@@ -18,7 +18,7 @@ public record TodoWithCategoryResponseWebModel(
                 todoWithCategoryDto.id(),
                 todoWithCategoryDto.title(),
                 todoWithCategoryDto.description(),
-                CategoryResponseWebModel.from(todoWithCategoryDto.category()),
+                todoWithCategoryDto.categoryTitle(),
                 todoWithCategoryDto.status().getTitle(),
                 todoWithCategoryDto.createdAt(),
                 todoWithCategoryDto.plannedAt()

@@ -26,38 +26,17 @@ class GetInboxTodosUseCase implements GetInboxTodos {
     public List<TodoWithCategoryDto> execute(Long userId) {
         var todos = todosByStatusExtractor.getUserTodosByStatus(userId, TodoStatus.CREATED);
 
-        Set<Long> categoryIds = todos.stream()
-                .map(item -> item.getCategoryId().getValue())
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-
-        Map<Long, Category> categoryMap = categoryIds.isEmpty()
-                ? Map.of()
-                : categoriesExtractor.getCategoriesByIds(categoryIds)
-                    .stream()
-                    .collect(Collectors.toMap(
-                            item -> item.getId().getValue(),
-                            Function.identity())
-                    );
-
-
         return todos
                 .stream()
-                .map(todo -> {
-                    Category category = Optional.ofNullable(todo.getCategoryId().getValue())
-                            .map(categoryMap::get)
-                            .orElse(null);
-
-                    return new TodoWithCategoryDto(
-                            todo.getId().getValue(),
-                            todo.getTitle().getValue(),
-                            todo.getDescription(),
-                            category,
-                            todo.getStatus(),
-                            todo.getCreatedAt(),
-                            todo.getPlannedAt()
-                    );
-                })
+                .map(todo -> new TodoWithCategoryDto(
+                        todo.getId().getValue(),
+                        todo.getTitle().getValue(),
+                        todo.getDescription(),
+                        todo.getCategoryTitle().getValue(),
+                        todo.getStatus(),
+                        todo.getCreatedAt(),
+                        todo.getPlannedAt()
+                ))
                 .toList();
     }
 }

@@ -32,7 +32,7 @@ export default function TaskListItem({ task }: TaskListItem) {
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors duration-200">{task.title}</h3>
-        {task?.category?.title && <p className="text-slate-600 text-sm mt-1">{task.category.title}</p>}
+        {task?.categoryTitle && <p className="text-slate-600 text-sm mt-1">{task.categoryTitle}</p>}
       </div>
       <div className="flex items-center gap-2">
         {task?.status?.title && <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClasses()}`}>

@@ -8,11 +8,11 @@ import com.example.todolist.application.outbound.todo.TodoUpdater;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
-import com.example.todolist.domain.model.CategoryId;
-import com.example.todolist.domain.model.Title;
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.*;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 class UpdateTodoUseCase implements UpdateTodo {
@@ -39,18 +39,19 @@ class UpdateTodoUseCase implements UpdateTodo {
             throw new TodoAccessDeniedException(updateTodoDto.todoId(), updateTodoDto.userId());
         }
 
-        // 3. Если указана новая категория, проверить её
-        if (updateTodoDto.categoryId() != null) {
-            activeCategoryExtractor.getActiveCategoryById(updateTodoDto.categoryId())
-                    .filter(category -> category.belongsToUser(updateTodoDto.userId()))
-                    .orElseThrow(() -> new CategoryNotFoundException(updateTodoDto.categoryId()));
-        }
+        CategoryId categoryId = CategoryId.of(updateTodoDto.categoryId());
+        Optional<Category> todoCategory = activeCategoryExtractor.getActiveCategoryById(categoryId);
 
-        // 4. Обновить через бизнес-метод
+
+        String categoryTitle = todoCategory
+                .map(item -> item.getTitle().getValue())
+                .orElse("");
+
         Todo updatedTodo = todo.update(
                 Title.of(updateTodoDto.title()),
                 updateTodoDto.description(),
                 CategoryId.of(updateTodoDto.categoryId()),
+                TodoCategoryTitle.of(categoryTitle),
                 TodoStatus.fromId(updateTodoDto.statusId()),
                 updateTodoDto.plannedAt()
         );

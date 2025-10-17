@@ -5,6 +5,7 @@ import com.example.todolist.application.inbound.todo.GetTodayTodos;
 import com.example.todolist.application.outbound.category.CategoriesExtractor;
 import com.example.todolist.application.outbound.todo.TodayActiveTodosExtractor;
 import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.Todo;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -23,40 +24,19 @@ class GetTodayTodosUseCase implements GetTodayTodos {
 
     @Override
     public List<TodoWithCategoryDto> execute(Long userId) {
-        var todos = todayActiveTodosExtractor.getUserTodayTodos(userId);
-
-        Set<Long> categoryIds = todos.stream()
-                .map(item -> item.getCategoryId().getValue())
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-
-        Map<Long, Category> categoryMap = categoryIds.isEmpty()
-                ? Map.of()
-                : categoriesExtractor.getCategoriesByIds(categoryIds)
-                    .stream()
-                    .collect(Collectors.toMap(
-                            item -> item.getId().getValue(),
-                            Function.identity())
-                    );
-
+        List<Todo> todos = todayActiveTodosExtractor.getUserTodayTodos(userId);
 
         return todos
                 .stream()
-                .map(todo -> {
-                    Category category = Optional.ofNullable(todo.getCategoryId().getValue())
-                            .map(categoryMap::get)
-                            .orElse(null);
-
-                    return new TodoWithCategoryDto(
-                            todo.getId().getValue(),
-                            todo.getTitle().getValue(),
-                            todo.getDescription(),
-                            category,
-                            todo.getStatus(),
-                            todo.getCreatedAt(),
-                            todo.getPlannedAt()
-                    );
-                })
+                .map(todo -> new TodoWithCategoryDto(
+                        todo.getId().getValue(),
+                        todo.getTitle().getValue(),
+                        todo.getDescription(),
+                        todo.getCategoryTitle().getValue(),
+                        todo.getStatus(),
+                        todo.getCreatedAt(),
+                        todo.getPlannedAt()
+                ))
                 .toList();
     }
 }

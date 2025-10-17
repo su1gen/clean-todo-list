@@ -32,3 +32,9 @@ databaseChangeLog:
   - include:
       file: 011-fill-user_id-column-in-categories-and-todos-tables.sql
       relativeToChangelogFile: true
+  - include:
+      file: 012-add-category_title-column-to-todos-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: 013-fill-category_title-column-in-todos-table.sql
+      relativeToChangelogFile: true

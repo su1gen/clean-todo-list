@@ -1,12 +1,15 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
 import com.example.todolist.application.outbound.category.*;
+import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.CategoryId;
 import com.example.todolist.infrastructure.persistence.entity.CategoryEntity;
 import com.example.todolist.infrastructure.persistence.mapper.CategoryMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -57,9 +60,13 @@ public class CategoryRepositoryImpl implements
     }
 
     @Override
-    public Optional<Category> getActiveCategoryById(Long id) {
-        return jpaRepository.findByIdAndDeletedAtIsNull(id)
-                .map(mapper::toDomain);
+    public Optional<Category> getActiveCategoryById(CategoryId categoryId) {
+        if (categoryId.notEmpty()) {
+            return Optional.ofNullable(jpaRepository.findByIdAndDeletedAtIsNull(categoryId.getValue())
+                    .map(mapper::toDomain)
+                    .orElseThrow(() -> new CategoryNotFoundException(categoryId.getValue())));
+        }
+        return Optional.empty();
     }
 
     @Override

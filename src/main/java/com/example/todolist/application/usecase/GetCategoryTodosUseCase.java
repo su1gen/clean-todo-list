@@ -7,11 +7,13 @@ import com.example.todolist.application.outbound.category.ActiveCategoryExtracto
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.CategoryId;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 class GetCategoryTodosUseCase implements GetCategoryTodos {
@@ -28,8 +30,7 @@ class GetCategoryTodosUseCase implements GetCategoryTodos {
     @Override
     public CategoryWithTodosDto execute(GetCategoryTodosDto getCategoryTodosDto) {
         TodoStatus status = TodoStatus.fromUrlParam(getCategoryTodosDto.status());
-        Category category = activeCategoryExtractor.getActiveCategoryById(getCategoryTodosDto.categoryId())
-                .orElseThrow(() -> new CategoryNotFoundException(getCategoryTodosDto.categoryId()));
+        Optional<Category> category = activeCategoryExtractor.getActiveCategoryById(CategoryId.of(getCategoryTodosDto.categoryId()));
 
         List<Todo> todos = todosByStatusAndCategoryExtractor.getUserTodosByCategoryAndStatus(
                 getCategoryTodosDto.userId(),
@@ -37,9 +38,10 @@ class GetCategoryTodosUseCase implements GetCategoryTodos {
                 status
         );
 
-        return new CategoryWithTodosDto(
-                category,
-                todos
-        );
+        return category.map(item -> new CategoryWithTodosDto(
+                        category.get(),
+                        todos
+                )
+        ).orElseThrow(IllegalStateException::new);
     }
 }

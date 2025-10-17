@@ -15,6 +15,7 @@ public class TodoMapper {
                 todo.getTitle().getValue(),
                 todo.getDescription(),
                 todo.getCategoryId().getValue(),
+                todo.getCategoryTitle().getValue(),
                 todo.getUserId().getValue(),
                 todo.getStatus(),
                 todo.getPlannedAt()
@@ -42,11 +43,11 @@ public class TodoMapper {
                 Title.of(entity.getTitle()),
                 entity.getDescription(),
                 CategoryId.of(entity.getCategoryId()),
+                TodoCategoryTitle.of(entity.getCategoryTitle()),
                 UserId.of(entity.getUserId()),
                 entity.getStatus(),
                 entity.getCreatedAt(),
                 entity.getDeletedAt(),
-                entity.getPlannedAt()
-        );
+                entity.getPlannedAt());
     }
 }

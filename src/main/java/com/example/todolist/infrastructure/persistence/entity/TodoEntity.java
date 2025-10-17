@@ -22,6 +22,9 @@ public class TodoEntity {
     @Column(name = "category_id")
     private Long categoryId;
 
+    @Column(name = "category_title")
+    private String categoryTitle;
+
     @Column(name = "user_id")
     private Long userId;
 
@@ -41,6 +44,7 @@ public class TodoEntity {
             String title,
             String description,
             Long categoryId,
+            String categoryTitle,
             Long userId,
             TodoStatus status,
             LocalDateTime plannedAt
@@ -48,6 +52,7 @@ public class TodoEntity {
         this.title = title;
         this.description = description;
         this.categoryId = categoryId;
+        this.categoryTitle = categoryTitle;
         this.userId = userId;
         this.status = status;
         this.plannedAt = plannedAt;
@@ -81,8 +86,16 @@ public class TodoEntity {
         return categoryId;
     }
 
+    public String getCategoryTitle() {
+        return categoryTitle;
+    }
+
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public void setCategoryTitle(String categoryTitle) {
+        this.categoryTitle = categoryTitle;
     }
 
     public Long getUserId() {

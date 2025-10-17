@@ -6,12 +6,12 @@ import com.example.todolist.application.outbound.category.ActiveCategoryExtracto
 import com.example.todolist.application.outbound.todo.TodoNextIdExtractor;
 import com.example.todolist.application.outbound.todo.TodoPersister;
 import com.example.todolist.application.outbound.user.UserByIdExtractor;
-import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * Use Case: Создание новой задачи.
@@ -47,12 +47,13 @@ class CreateTodoUseCase implements CreateTodo {
             throw new UserNotFoundException(createTodoDto.userId());
         }
 
-        // 2. Если указана категория, проверить её существование и принадлежность пользователю
-        if (createTodoDto.categoryId() != null) {
-            activeCategoryExtractor.getActiveCategoryById(createTodoDto.categoryId())
-                    .filter(category -> category.belongsToUser(createTodoDto.userId()))
-                    .orElseThrow(() -> new CategoryNotFoundException(createTodoDto.categoryId()));
-        }
+        CategoryId categoryId = CategoryId.of(createTodoDto.categoryId());
+        Optional<Category> todoCategory = activeCategoryExtractor.getActiveCategoryById(categoryId);
+
+
+        String categoryTitle = todoCategory
+                .map(item -> item.getTitle().getValue())
+                .orElse("");
 
         Long todoId = todoNextIdExtractor.getNextTodoId();
 
@@ -62,12 +63,12 @@ class CreateTodoUseCase implements CreateTodo {
                 Title.of(createTodoDto.title()),
                 createTodoDto.description(),
                 CategoryId.of(createTodoDto.categoryId()),
+                TodoCategoryTitle.of(categoryTitle),
                 UserId.of(createTodoDto.userId()),
                 TodoStatus.CREATED,
                 LocalDateTime.now(),
                 null,
-                createTodoDto.plannedAt()
-        );
+                createTodoDto.plannedAt());
 
         // 4. Сохранить
         return todoPersister.persist(todo);

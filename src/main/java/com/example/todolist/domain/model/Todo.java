@@ -19,6 +19,7 @@ public class Todo {
     private final Title title;
     private final String description;
     private final CategoryId categoryId;
+    private final TodoCategoryTitle categoryTitle;
     private final UserId userId;
     private final TodoStatus status;
     private final LocalDateTime createdAt;
@@ -30,6 +31,7 @@ public class Todo {
             Title title,
             String description,
             CategoryId categoryId,
+            TodoCategoryTitle categoryTitle,
             UserId userId,
             TodoStatus status,
             LocalDateTime createdAt,
@@ -40,6 +42,7 @@ public class Todo {
         this.title = title;
         this.description = description;
         this.categoryId = categoryId;
+        this.categoryTitle = categoryTitle;
         this.userId = userId;
         this.status = status;
         this.createdAt = createdAt;
@@ -50,9 +53,9 @@ public class Todo {
     /**
      * Обновить основные данные задачи
      */
-    public Todo update(Title newTitle, String newDescription, CategoryId newCategoryId, TodoStatus newTodoStatus, LocalDateTime newPlannedAt) {
-        return new Todo(this.id, newTitle, newDescription, newCategoryId, this.userId,
-                newTodoStatus, this.createdAt, this.deletedAt, newPlannedAt);
+    public Todo update(Title newTitle, String newDescription, CategoryId newCategoryId, TodoCategoryTitle categoryTitle, TodoStatus newTodoStatus, LocalDateTime newPlannedAt) {
+        return new Todo(this.id, newTitle, newDescription, newCategoryId, categoryTitle,
+                this.userId, newTodoStatus, this.createdAt, this.deletedAt, newPlannedAt);
     }
 
     /**
@@ -64,8 +67,8 @@ public class Todo {
                     "Cannot transition from " + this.status + " to " + newStatus
             );
         }
-        return new Todo(this.id, this.title, this.description, this.categoryId, this.userId,
-                newStatus, this.createdAt, this.deletedAt, this.plannedAt);
+        return new Todo(this.id, this.title, this.description, this.categoryId, this.categoryTitle,
+                this.userId, newStatus, this.createdAt, this.deletedAt, this.plannedAt);
     }
 
     /**
@@ -75,8 +78,8 @@ public class Todo {
         if (this.deletedAt != null) {
             throw new IllegalStateException("Todo is already deleted");
         }
-        return new Todo(this.id, this.title, this.description, this.categoryId, this.userId,
-                this.status, this.createdAt, LocalDateTime.now(), this.plannedAt);
+        return new Todo(this.id, this.title, this.description, this.categoryId, this.categoryTitle,
+                this.userId, this.status, this.createdAt, LocalDateTime.now(), this.plannedAt);
     }
 
     /**
@@ -86,8 +89,8 @@ public class Todo {
         if (this.deletedAt == null) {
             throw new IllegalStateException("Todo is not deleted");
         }
-        return new Todo(this.id, this.title, this.description, this.categoryId, this.userId,
-                this.status, this.createdAt, null, this.plannedAt);
+        return new Todo(this.id, this.title, this.description, this.categoryId, this.categoryTitle,
+                this.userId, this.status, this.createdAt, null, this.plannedAt);
     }
 
     /**
@@ -116,6 +119,7 @@ public class Todo {
     public Title getTitle() { return title; }
     public String getDescription() { return description; }
     public CategoryId getCategoryId() { return categoryId; }
+    public TodoCategoryTitle getCategoryTitle() { return categoryTitle; }
     public UserId getUserId() { return userId; }
     public TodoStatus getStatus() { return status; }
     public LocalDateTime getCreatedAt() { return createdAt; }

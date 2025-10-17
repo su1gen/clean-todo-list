@@ -18,7 +18,7 @@ export type Task = {
     title: string,
     description: string,
     categoryId?: number,
-    category?: Category,
+    categoryTitle?: string,
     status: Status,
     plannedAt: Date | null,
 }
