@@ -3,7 +3,6 @@ package com.example.todolist.infrastructure.persistence.repository;
 import com.example.todolist.application.outbound.user.*;
 import com.example.todolist.domain.model.User;
 import com.example.todolist.infrastructure.persistence.entity.UserEntity;
-import com.example.todolist.infrastructure.persistence.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -28,37 +27,35 @@ class UserRepositoryImpl implements
         UserNextIdExtractor {
 
     private final JpaUserRepository jpaRepository;
-    private final UserMapper mapper;
 
-    UserRepositoryImpl(JpaUserRepository jpaRepository, UserMapper mapper) {
+    UserRepositoryImpl(JpaUserRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
-        this.mapper = mapper;
     }
 
     @Override
     public User persist(User user) {
-        UserEntity entity = mapper.toEntity(user);
+        UserEntity entity = UserEntity.fromDomain(user);
         UserEntity savedEntity = jpaRepository.save(entity);
-        return mapper.toDomain(savedEntity);
+        return UserEntity.toDomain(savedEntity);
     }
 
     @Override
     public User update(User user) {
-        UserEntity entity = mapper.toEntity(user);
+        UserEntity entity = UserEntity.fromDomain(user);
         UserEntity savedEntity = jpaRepository.save(entity);
-        return mapper.toDomain(savedEntity);
+        return UserEntity.toDomain(savedEntity);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         return jpaRepository.findByEmail(email)
-                .map(mapper::toDomain);
+                .map(UserEntity::toDomain);
     }
 
     @Override
     public Optional<User> findById(Long id) {
         return jpaRepository.findById(id)
-                .map(mapper::toDomain);
+                .map(UserEntity::toDomain);
     }
 
     @Override

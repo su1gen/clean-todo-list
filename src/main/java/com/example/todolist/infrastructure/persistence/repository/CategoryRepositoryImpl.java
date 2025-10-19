@@ -5,11 +5,9 @@ import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.model.CategoryId;
 import com.example.todolist.infrastructure.persistence.entity.CategoryEntity;
-import com.example.todolist.infrastructure.persistence.mapper.CategoryMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,28 +24,25 @@ public class CategoryRepositoryImpl implements
         CategoriesExtractor {
 
     private final JpaCategoryRepository jpaRepository;
-    private final CategoryMapper mapper;
 
     public CategoryRepositoryImpl(
-            JpaCategoryRepository jpaRepository,
-            CategoryMapper mapper
+            JpaCategoryRepository jpaRepository
     ) {
         this.jpaRepository = jpaRepository;
-        this.mapper = mapper;
     }
 
     @Override
     public Category persist(Category category) {
-        CategoryEntity entity = mapper.toEntity(category);
+        CategoryEntity entity = CategoryEntity.fromDomain(category);
         CategoryEntity savedEntity = jpaRepository.save(entity);
-        return mapper.toDomain(savedEntity);
+        return CategoryEntity.toDomain(savedEntity);
     }
 
     @Override
     public Category update(Category category) {
-        CategoryEntity entity = mapper.toEntity(category);
+        CategoryEntity entity = CategoryEntity.fromDomain(category);
         CategoryEntity savedEntity = jpaRepository.save(entity);
-        return mapper.toDomain(savedEntity);
+        return CategoryEntity.toDomain(savedEntity);
     }
 
     @Override
@@ -55,7 +50,7 @@ public class CategoryRepositoryImpl implements
         List<CategoryEntity> categories = jpaRepository.findByUserIdAndDeletedAtIsNullOrderByIdDesc(userId);
         return categories
                 .stream()
-                .map(mapper::toDomain)
+                .map(CategoryEntity::toDomain)
                 .toList();
     }
 
@@ -63,7 +58,7 @@ public class CategoryRepositoryImpl implements
     public Optional<Category> getActiveCategoryById(CategoryId categoryId) {
         if (categoryId.notEmpty()) {
             return Optional.ofNullable(jpaRepository.findByIdAndDeletedAtIsNull(categoryId.getValue())
-                    .map(mapper::toDomain)
+                    .map(CategoryEntity::toDomain)
                     .orElseThrow(() -> new CategoryNotFoundException(categoryId.getValue())));
         }
         return Optional.empty();
@@ -73,7 +68,7 @@ public class CategoryRepositoryImpl implements
     public List<Category> getCategoriesByIds(Set<Long> ids) {
         return jpaRepository.findByIdsAndDeletedAtIsNull(ids)
                 .stream()
-                .map(mapper::toDomain)
+                .map(CategoryEntity::toDomain)
                 .toList();
     }
 

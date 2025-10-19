@@ -4,7 +4,6 @@ import com.example.todolist.application.outbound.todo.*;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
 import com.example.todolist.infrastructure.persistence.entity.TodoEntity;
-import com.example.todolist.infrastructure.persistence.mapper.TodoMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -27,17 +26,15 @@ public class TodoRepositoryImpl implements
         TodoNextIdExtractor {
 
     private final JpaTodoRepository jpaRepository;
-    private final TodoMapper mapper;
 
-    public TodoRepositoryImpl(JpaTodoRepository jpaRepository, TodoMapper mapper) {
+    public TodoRepositoryImpl(JpaTodoRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
-        this.mapper = mapper;
     }
 
     @Override
     public Optional<Todo> findById(Long id) {
         return jpaRepository.findByIdAndDeletedAtIsNull(id)
-                .map(mapper::toDomain);
+                .map(TodoEntity::toDomain);
     }
 
     @Override
@@ -46,7 +43,7 @@ public class TodoRepositoryImpl implements
 
         return todayTodos
                 .stream()
-                .map(mapper::toDomain)
+                .map(TodoEntity::toDomain)
                 .toList();
     }
 
@@ -56,7 +53,7 @@ public class TodoRepositoryImpl implements
 
         return todayTodos
                 .stream()
-                .map(mapper::toDomain)
+                .map(TodoEntity::toDomain)
                 .toList();
     }
 
@@ -69,22 +66,22 @@ public class TodoRepositoryImpl implements
 
         return todayTodos
                 .stream()
-                .map(mapper::toDomain)
+                .map(TodoEntity::toDomain)
                 .toList();
     }
 
     @Override
     public Todo persist(Todo todo) {
-        TodoEntity entity = mapper.toEntity(todo);
+        TodoEntity entity = TodoEntity.fromDomain(todo);
         TodoEntity savedEntity = jpaRepository.save(entity);
-        return mapper.toDomain(savedEntity);
+        return TodoEntity.toDomain(savedEntity);
     }
 
     @Override
     public Todo update(Todo todo) {
-        TodoEntity entity = mapper.toEntity(todo);
+        TodoEntity entity = TodoEntity.fromDomain(todo);
         TodoEntity savedEntity = jpaRepository.save(entity);
-        return mapper.toDomain(savedEntity);
+        return TodoEntity.toDomain(savedEntity);
     }
 
     @Override

@@ -1,6 +1,10 @@
 package com.example.todolist.infrastructure.persistence.entity;
 
 
+import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.CategoryId;
+import com.example.todolist.domain.model.Title;
+import com.example.todolist.domain.model.UserId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -32,6 +36,41 @@ public class CategoryEntity {
     public CategoryEntity(String title, Long userId) {
         this.title = title;
         this.userId = userId;
+    }
+
+    /**
+     * Доменная модель → JPA Entity
+     */
+    public static CategoryEntity fromDomain(Category category) {
+        CategoryEntity entity = new CategoryEntity(
+                category.getTitle().getValue(),
+                category.getUserId().getValue()
+        );
+
+        if (category.getId().notEmpty()) {
+            entity.setId(category.getId().getValue());
+        }
+
+        if (category.getCreatedAt() != null) {
+            entity.setCreatedAt(category.getCreatedAt());
+        }
+
+        entity.setDeletedAt(category.getDeletedAt());
+
+        return entity;
+    }
+
+    /**
+     * JPA Entity → Доменная модель
+     */
+    public static Category toDomain(CategoryEntity entity) {
+        return new Category(
+                CategoryId.of(entity.getId()),
+                Title.of(entity.getTitle()),
+                UserId.of(entity.getUserId()),
+                entity.getCreatedAt(),
+                entity.getDeletedAt()
+        );
     }
 
     // Getters & Setters
