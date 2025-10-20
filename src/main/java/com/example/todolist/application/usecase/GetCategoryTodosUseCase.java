@@ -5,7 +5,6 @@ import com.example.todolist.application.dto.GetCategoryTodosDto;
 import com.example.todolist.application.inbound.todo.GetCategoryTodos;
 import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
-import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.model.CategoryId;
 import com.example.todolist.domain.model.Todo;

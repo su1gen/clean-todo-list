@@ -4,22 +4,17 @@ import com.example.todolist.application.dto.TodoWithCategoryDto;
 import com.example.todolist.application.inbound.todo.GetInboxTodos;
 import com.example.todolist.application.outbound.category.CategoriesExtractor;
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusExtractor;
-import com.example.todolist.domain.model.Category;
 import com.example.todolist.domain.model.TodoStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
 class GetInboxTodosUseCase implements GetInboxTodos {
     private final ActiveTodosByStatusExtractor todosByStatusExtractor;
-    private final CategoriesExtractor categoriesExtractor;
 
-    GetInboxTodosUseCase(ActiveTodosByStatusExtractor todosByStatusExtractor, CategoriesExtractor categoriesExtractor) {
+    GetInboxTodosUseCase(ActiveTodosByStatusExtractor todosByStatusExtractor) {
         this.todosByStatusExtractor = todosByStatusExtractor;
-        this.categoriesExtractor = categoriesExtractor;
     }
 
     @Override
