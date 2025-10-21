@@ -2,6 +2,7 @@ export const routes = {
   categories: {
     all: "/categories",
     store: "/categories",
+    edit: (id: number) => `/categories/${id}`,
   },
   todos: {
     all: "/todos",

@@ -4,6 +4,8 @@ import com.example.todolist.application.dto.category.RenameCategoryDto;
 import com.example.todolist.application.inbound.category.RenameCategory;
 import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
 import com.example.todolist.application.outbound.category.CategoryPersister;
+import com.example.todolist.domain.exception.CategoryAccessDeniedException;
+import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.Title;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
@@ -32,22 +34,23 @@ class RenameCategoryUseCase implements RenameCategory {
 
     @Override
     public void execute(RenameCategoryDto dto) {
-        final var id = CategoryId.of(dto.id());
+        final var categoryId = CategoryId.of(dto.categoryId());
         final var title = Title.of(dto.title());
 
-        final var category = categoryExtractor.getActiveCategoryById(id);
+        final var category = categoryExtractor.getActiveCategoryById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId.getValue()));
 
-        category.ifPresentOrElse(c ->
-        {
-            Category updated = c.updateTitle(title);
-            categoryPersister.persist(updated);
+        if (!category.belongsToUser(dto.userId())) {
+            throw new CategoryAccessDeniedException(dto.categoryId(), dto.userId());
+        }
 
-            var event = new CategoryTitleRenamedEvent(
-                    updated.getId().getValue(),
-                    updated.getTitle().getValue()
-            );
-            applicationEventPublisher.publishEvent(event);
-        }, () -> System.out.println("Error"));
+        Category updated = category.updateTitle(title);
+        categoryPersister.persist(updated);
 
+        var event = new CategoryTitleRenamedEvent(
+                updated.getId().getValue(),
+                updated.getTitle().getValue()
+        );
+        applicationEventPublisher.publishEvent(event);
     }
 }

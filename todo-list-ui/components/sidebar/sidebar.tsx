@@ -13,7 +13,7 @@ export function Sidebar() {
   const {categories} = useCategories()
   const pathname = usePathname();
 
-  return <div className="w-80 bg-gradient-to-br from-slate-50 to-slate-100 border-r border-slate-200 h-screen overflow-y-auto">
+  return <div className="w-96 bg-gradient-to-br from-slate-50 to-slate-100 border-r border-slate-200 h-screen overflow-y-auto">
     <div className="p-6">
       {/* Create Task Button */}
       <Link href="/tasks/new"

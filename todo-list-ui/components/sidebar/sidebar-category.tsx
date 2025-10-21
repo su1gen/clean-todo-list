@@ -1,17 +1,18 @@
 "use client"
 
-import { Category } from "@/types";
-import { usePathname } from "next/navigation";
-import { Check, ChevronRight, Folder, Play, X } from "lucide-react";
+import {Category} from "@/types";
+import {usePathname} from "next/navigation";
+import {Check, ChevronRight, Folder, Play, X} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import {useState} from "react";
+import SidebarEditCategory from "@/components/sidebar/sidebar-edit-category";
 
 type SidebarCategoryProps = {
   category: Category
 }
 
 export default function SidebarCategory({ category }: SidebarCategoryProps) {
-  const [isOpened, setIsOpened] = useState(false);
+  const [isCategoryOpened, setIsCategoryOpened] = useState(false);
   const pathname = usePathname();
 
 
@@ -20,23 +21,21 @@ export default function SidebarCategory({ category }: SidebarCategoryProps) {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          setIsOpened(prev => !prev);
+          setIsCategoryOpened(prev => !prev);
         }}
         className="p-3"
       >
-        <ChevronRight size={16} className={`transition-transform duration-300 text-slate-400 ${isOpened && 'rotate-90'}`} />
+        <ChevronRight size={16} className={`transition-transform duration-300 text-slate-400 ${isCategoryOpened && 'rotate-90'}`} />
       </button>
       <Link href={`/category/${category.id}`} className="flex items-center w-full py-3 pr-1">
         <Folder size={20} className="text-purple-500 mr-2" />
-        <span className="font-medium text-slate-700 flex-1">{category.title}</span>
-        <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-full text-xs font-medium">
-          15
-        </span>
+        <span className="font-medium text-slate-700 flex-1 break-all">{category.title}</span>
       </Link>
+      <SidebarEditCategory category={category} />
     </div>
 
      {/*Subfolders */}
-    <div className={`transition-all duration-300 ${isOpened ? 'max-h-96 opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+    <div className={`transition-all duration-300 ${isCategoryOpened ? 'max-h-96 opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}>
       <div className="ml-8 space-y-1">
         <Link href={`/category/${category.id}/in-process`}
               className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-white hover:shadow-sm ${pathname === `/category/${category.id}/in-process` ? 'bg-white shadow-sm border-l-4 border-orange-500' : ''}`}
