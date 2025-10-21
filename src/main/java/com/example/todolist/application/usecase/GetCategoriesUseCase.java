@@ -2,7 +2,7 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.inbound.category.GetCategories;
 import com.example.todolist.application.outbound.category.UserActiveCategoriesExtractor;
-import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.category.Category;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -4,15 +4,28 @@ import com.example.todolist.application.dto.CreateCategoryDto;
 import com.example.todolist.application.outbound.category.CategoryNextIdExtractor;
 import com.example.todolist.application.outbound.category.CategoryPersister;
 import com.example.todolist.application.outbound.user.UserByIdExtractor;
-import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.Email;
+import com.example.todolist.domain.model.HashedPassword;
+import com.example.todolist.domain.model.Title;
+import com.example.todolist.domain.model.User;
+import com.example.todolist.domain.model.UserId;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class CreateCategoryUseCaseTest {
 
@@ -29,7 +42,8 @@ class CreateCategoryUseCaseTest {
         createCategoryUseCase = new CreateCategoryUseCase(
                 categoryPersister,
                 categoryNextIdExtractor,
-                userByIdExtractor
+                userByIdExtractor,
+                System.out::println
         );
     }
 

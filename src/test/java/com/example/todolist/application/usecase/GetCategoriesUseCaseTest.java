@@ -1,8 +1,8 @@
 package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.outbound.category.UserActiveCategoriesExtractor;
-import com.example.todolist.domain.model.Category;
-import com.example.todolist.domain.model.CategoryId;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.domain.model.Title;
 import com.example.todolist.domain.model.UserId;
 import org.junit.jupiter.api.BeforeEach;

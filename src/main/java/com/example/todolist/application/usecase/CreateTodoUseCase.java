@@ -7,7 +7,14 @@ import com.example.todolist.application.outbound.todo.TodoNextIdExtractor;
 import com.example.todolist.application.outbound.todo.TodoPersister;
 import com.example.todolist.application.outbound.user.UserByIdExtractor;
 import com.example.todolist.domain.exception.UserNotFoundException;
-import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
+import com.example.todolist.domain.model.Title;
+import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.category.TodoCategoryTitle;
+import com.example.todolist.domain.model.TodoId;
+import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.UserId;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -53,7 +60,7 @@ class CreateTodoUseCase implements CreateTodo {
 
         String categoryTitle = todoCategory
                 .map(item -> item.getTitle().getValue())
-                .orElse("");
+                .orElse(TodoCategoryTitle.EMPTY_TITLE_VALUE);
 
         Long todoId = todoNextIdExtractor.getNextTodoId();
 
@@ -62,7 +69,7 @@ class CreateTodoUseCase implements CreateTodo {
                 TodoId.of(todoId),
                 Title.of(createTodoDto.title()),
                 createTodoDto.description(),
-                CategoryId.of(createTodoDto.categoryId()),
+                categoryId,
                 TodoCategoryTitle.of(categoryTitle),
                 UserId.of(createTodoDto.userId()),
                 TodoStatus.CREATED,

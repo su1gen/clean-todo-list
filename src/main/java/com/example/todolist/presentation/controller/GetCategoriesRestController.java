@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.controller;
 
 
-import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.presentation.webmodels.CategoryResponseWebModel;
 import com.example.todolist.application.inbound.category.GetCategories;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;

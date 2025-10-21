@@ -8,6 +8,9 @@ import com.example.todolist.application.outbound.user.UserByIdExtractor;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
+import com.example.todolist.domain.model.category.TodoCategoryTitle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

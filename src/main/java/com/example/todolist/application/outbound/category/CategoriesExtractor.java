@@ -1,6 +1,6 @@
 package com.example.todolist.application.outbound.category;
 
-import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.category.Category;
 
 import java.util.List;
 import java.util.Set;

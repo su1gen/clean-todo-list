@@ -1,7 +1,7 @@
 package com.example.todolist.application.outbound.category;
 
-import com.example.todolist.domain.model.Category;
-import com.example.todolist.domain.model.CategoryId;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
 
 import java.util.Optional;
 

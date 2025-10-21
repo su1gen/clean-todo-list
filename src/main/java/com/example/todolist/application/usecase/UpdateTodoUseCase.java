@@ -5,13 +5,14 @@ import com.example.todolist.application.inbound.todo.UpdateTodo;
 import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
 import com.example.todolist.application.outbound.todo.ActiveTodoExtractor;
 import com.example.todolist.application.outbound.todo.TodoUpdater;
-import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
 import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
+import com.example.todolist.domain.model.category.TodoCategoryTitle;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Component

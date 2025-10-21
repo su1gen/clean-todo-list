@@ -1,8 +1,8 @@
 package com.example.todolist.infrastructure.persistence.entity;
 
 
-import com.example.todolist.domain.model.Category;
-import com.example.todolist.domain.model.CategoryId;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.domain.model.Title;
 import com.example.todolist.domain.model.UserId;
 import jakarta.persistence.*;
@@ -31,7 +31,7 @@ public class CategoryEntity {
     private LocalDateTime deletedAt;
 
     // JPA требует пустой конструктор
-    protected CategoryEntity() {}
+    public CategoryEntity() {}
 
     public CategoryEntity(String title, Long userId) {
         this.title = title;

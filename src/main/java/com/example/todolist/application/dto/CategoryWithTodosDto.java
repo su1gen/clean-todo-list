@@ -1,6 +1,6 @@
 package com.example.todolist.application.dto;
 
-import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.Todo;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.example.todolist.presentation.webmodels;
 
-import com.example.todolist.domain.model.Category;
+import com.example.todolist.domain.model.category.Category;
 
 public record CategoryResponseWebModel(
         Long id,

@@ -1,12 +1,12 @@
 package com.example.todolist.application.dto;
 
 import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.category.CategoryId;
+import com.example.todolist.domain.model.category.TodoCategoryTitle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TodoWithCategoryDtoTest {
 

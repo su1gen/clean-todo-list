@@ -1,9 +1,14 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
-import com.example.todolist.application.outbound.category.*;
+import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
+import com.example.todolist.application.outbound.category.CategoriesExtractor;
+import com.example.todolist.application.outbound.category.CategoryNextIdExtractor;
+import com.example.todolist.application.outbound.category.CategoryPersister;
+import com.example.todolist.application.outbound.category.CategoryUpdater;
+import com.example.todolist.application.outbound.category.UserActiveCategoriesExtractor;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
-import com.example.todolist.domain.model.Category;
-import com.example.todolist.domain.model.CategoryId;
+import com.example.todolist.domain.model.category.Category;
+import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.infrastructure.persistence.entity.CategoryEntity;
 import org.springframework.stereotype.Component;
 
@@ -73,7 +78,9 @@ public class CategoryRepositoryImpl implements
     }
 
     @Override
-    public Long getNextCategoryId() {
-        return jpaRepository.getNextCategoryId();
+    public CategoryId getNextCategoryId() {
+        final var next = jpaRepository.getNextCategoryId();
+        return CategoryId.of(next);
     }
+
 }

@@ -2,6 +2,8 @@ package com.example.todolist.application.usecase;
 
 import com.example.todolist.application.outbound.todo.TodayActiveTodosExtractor;
 import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.category.CategoryId;
+import com.example.todolist.domain.model.category.TodoCategoryTitle;
 
 import java.time.LocalDateTime;
 import java.util.List;

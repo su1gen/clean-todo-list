@@ -1,6 +1,8 @@
 package com.example.todolist.infrastructure.persistence.entity;
 
 import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.category.CategoryId;
+import com.example.todolist.domain.model.category.TodoCategoryTitle;
 import com.example.todolist.infrastructure.persistence.converter.TodoStatusConverter;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
