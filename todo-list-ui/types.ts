@@ -3,14 +3,16 @@ export type Category = {
     title: string;
 }
 
-export type CategoryWithTasks = {
-    title: string;
-    todos: Task[]
-}
-
 export type Status = {
     id: number;
     title: string;
+}
+
+export type TaskInList = {
+    id: number,
+    title: string,
+    statusTitle: string,
+    categoryTitle?: string,
 }
 
 export type Task = {

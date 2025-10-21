@@ -1,29 +1,14 @@
-import TasksEmpty from "@/components/tasks/tasks-empty";
-import {Task} from "@/types";
+import {TaskInList} from "@/types";
 import TaskListItem from "@/components/tasks/task-list-item";
-import PageTitle from "@/components/ui/page-title";
-import PageDescription from "@/components/ui/page-description";
 
 type TaskListProps = {
-  title: string;
-  description: string;
-  tasks: Task[];
+  tasks: TaskInList[];
 }
 
-export default function TaskList({tasks, title, description}: TaskListProps) {
-  return <div className="p-8 animate-fadeIn">
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <PageTitle title={title}/>
-        <PageDescription description={description}/>
-      </div>
-
-      {tasks.length === 0 && <TasksEmpty/>}
-      {tasks.length > 0 && <div className="grid gap-4">
-        {tasks.map(task => (
-          <TaskListItem key={task.id} task={task}/>
-        ))}
-      </div>}
-    </div>
+export default function TaskList({tasks}: TaskListProps) {
+  return <div className="grid gap-4">
+    {tasks.map(task => (
+      <TaskListItem key={task.id} task={task}/>
+    ))}
   </div>
 }

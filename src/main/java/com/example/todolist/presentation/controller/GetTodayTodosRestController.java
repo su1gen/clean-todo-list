@@ -1,9 +1,9 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.TodoWithCategoryDto;
 import com.example.todolist.application.inbound.todo.GetTodayTodos;
+import com.example.todolist.domain.model.Todo;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
-import com.example.todolist.presentation.webmodels.TodoWithCategoryResponseWebModel;
+import com.example.todolist.presentation.webmodels.TodoWithCategoryListItemWebModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +23,13 @@ class GetTodayTodosRestController {
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<TodoWithCategoryResponseWebModel>> getTodayTodos(
+    public ResponseEntity<List<TodoWithCategoryListItemWebModel>> getTodayTodos(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        List<TodoWithCategoryDto> todos = getTodayTodos.execute(userDetails.getUserId());
+        List<Todo> todos = getTodayTodos.execute(userDetails.getUserId());
 
-        List<TodoWithCategoryResponseWebModel> response = todos.stream()
-                .map(TodoWithCategoryResponseWebModel::from)
+        List<TodoWithCategoryListItemWebModel> response = todos.stream()
+                .map(TodoWithCategoryListItemWebModel::from)
                 .toList();
 
         return ResponseEntity.ok(response);

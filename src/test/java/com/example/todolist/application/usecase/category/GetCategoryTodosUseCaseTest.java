@@ -1,8 +1,7 @@
 package com.example.todolist.application.usecase.category;
 
-import com.example.todolist.application.dto.CategoryWithTodosDto;
 import com.example.todolist.application.dto.GetCategoryTodosDto;
-import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
+import com.example.todolist.application.outbound.category.CategoryExister;
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
 import com.example.todolist.domain.model.*;
 import com.example.todolist.domain.model.category.Category;
@@ -13,24 +12,23 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class GetCategoryTodosUseCaseTest {
     private ActiveTodosByStatusAndCategoryExtractor todosByStatusAndCategoryExtractor;
-    private ActiveCategoryExtractor activeCategoryExtractor;
+    private CategoryExister categoryExister;
     private GetCategoryTodosUseCase getCategoryTodosUseCase;
 
     @BeforeEach
     void setUp() {
         todosByStatusAndCategoryExtractor = mock(ActiveTodosByStatusAndCategoryExtractor.class);
-        activeCategoryExtractor = mock(ActiveCategoryExtractor.class);
+        categoryExister = mock(CategoryExister.class);
         getCategoryTodosUseCase = new GetCategoryTodosUseCase(
                 todosByStatusAndCategoryExtractor,
-                activeCategoryExtractor
+                categoryExister
         );
     }
 
@@ -76,31 +74,24 @@ class GetCategoryTodosUseCaseTest {
                 )
         );
 
-        when(activeCategoryExtractor.getActiveCategoryById(any(CategoryId.class))).thenReturn(Optional.of(category));
+        when(categoryExister.exists(any(CategoryId.class))).thenReturn(true);
         when(todosByStatusAndCategoryExtractor.getUserTodosByCategoryAndStatus(
                 getCategoryTodosDto.userId(),
                 getCategoryTodosDto.categoryId(),
                 TodoStatus.fromUrlParam(getCategoryTodosDto.status())
         )).thenReturn(todos);
 
-        CategoryWithTodosDto result = getCategoryTodosUseCase.execute(getCategoryTodosDto);
+        List<Todo> result = getCategoryTodosUseCase.execute(getCategoryTodosDto);
 
-        verify(activeCategoryExtractor, times(1)).getActiveCategoryById(any(CategoryId.class));
+        verify(categoryExister, times(1)).exists(any(CategoryId.class));
         verify(todosByStatusAndCategoryExtractor, times(1)).getUserTodosByCategoryAndStatus(
                 getCategoryTodosDto.userId(),
                 getCategoryTodosDto.categoryId(),
                 TodoStatus.fromUrlParam(getCategoryTodosDto.status())
         );
 
-
-        assertEquals(category.getId().getValue(), result.category().getId().getValue());
-        assertEquals(category.getTitle().getValue(), result.category().getTitle().getValue());
-        assertEquals(category.getUserId().getValue(), result.category().getUserId().getValue());
-        assertNotNull(result.category().getCreatedAt());
-        assertNull(result.category().getDeletedAt());
-
-        assertEquals(todos.size(), result.todos().size());
-        assertEquals(todos.get(0).getId().getValue(), result.todos().get(0).getId().getValue());
-        assertEquals(todos.get(1).getId().getValue(), result.todos().get(1).getId().getValue());
+        assertEquals(todos.size(), result.size());
+        assertEquals(todos.get(0).getId().getValue(), result.get(0).getId().getValue());
+        assertEquals(todos.get(1).getId().getValue(), result.get(1).getId().getValue());
     }
 }

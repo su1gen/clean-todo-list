@@ -1,46 +1,38 @@
 package com.example.todolist.application.usecase.category;
 
-import com.example.todolist.application.dto.CategoryWithTodosDto;
 import com.example.todolist.application.dto.GetCategoryTodosDto;
 import com.example.todolist.application.inbound.category.GetCategoryTodos;
-import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
+import com.example.todolist.application.outbound.category.CategoryExister;
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
-import com.example.todolist.domain.model.category.Category;
-import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.domain.model.Todo;
 import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.category.CategoryId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 class GetCategoryTodosUseCase implements GetCategoryTodos {
     private final ActiveTodosByStatusAndCategoryExtractor todosByStatusAndCategoryExtractor;
-    private final ActiveCategoryExtractor activeCategoryExtractor;
+    private final CategoryExister categoryExister;
 
     GetCategoryTodosUseCase(
             ActiveTodosByStatusAndCategoryExtractor todosByStatusAndCategoryExtractor,
-            ActiveCategoryExtractor activeCategoryExtractor) {
+            CategoryExister categoryExister) {
         this.todosByStatusAndCategoryExtractor = todosByStatusAndCategoryExtractor;
-        this.activeCategoryExtractor = activeCategoryExtractor;
+        this.categoryExister = categoryExister;
     }
 
     @Override
-    public CategoryWithTodosDto execute(GetCategoryTodosDto getCategoryTodosDto) {
+    public List<Todo> execute(GetCategoryTodosDto getCategoryTodosDto) {
         TodoStatus status = TodoStatus.fromUrlParam(getCategoryTodosDto.status());
-        Optional<Category> category = activeCategoryExtractor.getActiveCategoryById(CategoryId.of(getCategoryTodosDto.categoryId()));
 
-        List<Todo> todos = todosByStatusAndCategoryExtractor.getUserTodosByCategoryAndStatus(
+        categoryExister.exists(CategoryId.of(getCategoryTodosDto.categoryId()));
+
+        return todosByStatusAndCategoryExtractor.getUserTodosByCategoryAndStatus(
                 getCategoryTodosDto.userId(),
                 getCategoryTodosDto.categoryId(),
                 status
         );
-
-        return category.map(item -> new CategoryWithTodosDto(
-                        category.get(),
-                        todos
-                )
-        ).orElseThrow(IllegalStateException::new);
     }
 }

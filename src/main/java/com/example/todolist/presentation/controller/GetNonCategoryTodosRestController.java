@@ -2,6 +2,7 @@ package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.GetNonCategoryTodosDto;
 import com.example.todolist.domain.model.Todo;
+import com.example.todolist.presentation.webmodels.TodoListItemWebModel;
 import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
 import com.example.todolist.application.inbound.todo.GetNonCategoryTodos;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
@@ -24,7 +25,7 @@ class GetNonCategoryTodosRestController {
     }
 
     @GetMapping("/without-category")
-    public ResponseEntity<List<TodoResponseWebModel>> getWithoutCategoryTodos(
+    public ResponseEntity<List<TodoListItemWebModel>> getWithoutCategoryTodos(
             @RequestParam(defaultValue = "") String status,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
@@ -32,8 +33,10 @@ class GetNonCategoryTodosRestController {
 
         List<Todo> todos = getNonCategoryTodos.execute(getNonCategoryTodosDto);
 
-        List<TodoResponseWebModel> response = todos.stream()
-                .map(TodoResponseWebModel::from)
+        System.out.println("todos: " + todos);
+
+        List<TodoListItemWebModel> response = todos.stream()
+                .map(TodoListItemWebModel::from)
                 .toList();
 
         return ResponseEntity.ok(response);

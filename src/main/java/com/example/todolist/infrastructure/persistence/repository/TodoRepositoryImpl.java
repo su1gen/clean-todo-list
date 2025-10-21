@@ -22,6 +22,7 @@ public class TodoRepositoryImpl implements
         ActiveTodoExtractor,
         ActiveTodosByStatusExtractor,
         ActiveTodosByStatusAndCategoryExtractor,
+        ActiveTodosByStatusWithoutCategoryExtractor,
         TodayActiveTodosExtractor,
         TodoNextIdExtractor {
 
@@ -39,9 +40,21 @@ public class TodoRepositoryImpl implements
 
     @Override
     public List<Todo> getUserTodosByCategoryAndStatus(Long userId, Long categoryId, TodoStatus todoStatus) {
-        List<TodoEntity> todayTodos = jpaRepository.findByUserIdAndCategoryIdAndDeletedAtIsNullAndStatusOrderByIdDesc(userId, categoryId, todoStatus);
+        List<TodoEntity> todos = jpaRepository.findByUserIdAndCategoryIdAndDeletedAtIsNullAndStatusOrderByIdDesc(userId, categoryId, todoStatus);
 
-        return todayTodos
+        System.out.println("todos111: " + todos);
+
+        return todos
+                .stream()
+                .map(TodoEntity::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Todo> getUserTodosWithoutCategoryByStatus(Long userId, TodoStatus todoStatus) {
+        List<TodoEntity> todos = jpaRepository.findByUserIdAndCategoryIdIsNullAndDeletedAtIsNullAndStatusOrderByIdDesc(userId, todoStatus);
+
+        return todos
                 .stream()
                 .map(TodoEntity::toDomain)
                 .toList();

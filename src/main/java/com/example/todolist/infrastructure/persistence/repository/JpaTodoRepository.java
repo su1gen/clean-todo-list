@@ -37,6 +37,12 @@ public interface JpaTodoRepository extends JpaRepository<TodoEntity, Long> {
             @Param("todoStatus") TodoStatus todoStatus
     );
 
+    @Query("SELECT t FROM TodoEntity t WHERE t.deletedAt IS NULL AND t.categoryId IS NULL AND t.userId = :userId AND t.status = :todoStatus ORDER BY t.id DESC")
+    List<TodoEntity> findByUserIdAndCategoryIdIsNullAndDeletedAtIsNullAndStatusOrderByIdDesc(
+            @Param("userId") Long userId,
+            @Param("todoStatus") TodoStatus todoStatus
+    );
+
     @Query(value = "SELECT nextval('todos_id_seq')", nativeQuery = true)
     Long getNextTodoId();
 }

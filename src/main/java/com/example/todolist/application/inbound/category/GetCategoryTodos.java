@@ -1,8 +1,10 @@
 package com.example.todolist.application.inbound.category;
 
-import com.example.todolist.application.dto.CategoryWithTodosDto;
 import com.example.todolist.application.dto.GetCategoryTodosDto;
+import com.example.todolist.domain.model.Todo;
+
+import java.util.List;
 
 public interface GetCategoryTodos {
-    CategoryWithTodosDto execute(GetCategoryTodosDto getCategoryTodosDto);
+    List<Todo> execute(GetCategoryTodosDto getCategoryTodosDto);
 }

@@ -1,11 +1,6 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
-import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
-import com.example.todolist.application.outbound.category.CategoriesExtractor;
-import com.example.todolist.application.outbound.category.CategoryNextIdExtractor;
-import com.example.todolist.application.outbound.category.CategoryPersister;
-import com.example.todolist.application.outbound.category.CategoryUpdater;
-import com.example.todolist.application.outbound.category.UserActiveCategoriesExtractor;
+import com.example.todolist.application.outbound.category.*;
 import com.example.todolist.domain.exception.CategoryNotFoundException;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
@@ -26,7 +21,9 @@ public class CategoryRepositoryImpl implements
         CategoryUpdater,
         CategoryNextIdExtractor,
         UserActiveCategoriesExtractor,
-        CategoriesExtractor {
+        CategoriesExtractor,
+        CategoryExister
+{
 
     private final JpaCategoryRepository jpaRepository;
 
@@ -83,4 +80,11 @@ public class CategoryRepositoryImpl implements
         return CategoryId.of(next);
     }
 
+    @Override
+    public boolean exists(CategoryId categoryId) {
+        if (!jpaRepository.existsById(categoryId.getValue())){
+            throw new CategoryNotFoundException(categoryId.getValue());
+        }
+        return true;
+    }
 }

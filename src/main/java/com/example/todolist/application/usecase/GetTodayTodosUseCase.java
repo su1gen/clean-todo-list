@@ -1,8 +1,8 @@
 package com.example.todolist.application.usecase;
 
-import com.example.todolist.application.dto.TodoWithCategoryDto;
 import com.example.todolist.application.inbound.todo.GetTodayTodos;
 import com.example.todolist.application.outbound.todo.TodayActiveTodosExtractor;
+import com.example.todolist.domain.model.Todo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,10 +16,7 @@ class GetTodayTodosUseCase implements GetTodayTodos {
     }
 
     @Override
-    public List<TodoWithCategoryDto> execute(Long userId) {
-        return todayActiveTodosExtractor.getUserTodayTodos(userId)
-                .stream()
-                .map(TodoWithCategoryDto::from)
-                .toList();
+    public List<Todo> execute(Long userId) {
+        return todayActiveTodosExtractor.getUserTodayTodos(userId);
     }
 }

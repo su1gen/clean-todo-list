@@ -2,7 +2,10 @@ package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.TodoWithCategoryDto;
 import com.example.todolist.application.inbound.todo.GetInboxTodos;
+import com.example.todolist.domain.model.Todo;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
+import com.example.todolist.presentation.webmodels.TodoListItemWebModel;
+import com.example.todolist.presentation.webmodels.TodoWithCategoryListItemWebModel;
 import com.example.todolist.presentation.webmodels.TodoWithCategoryResponseWebModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,13 +25,13 @@ class GetInboxTodosRestController {
     }
 
     @GetMapping("/inbox")
-    public ResponseEntity<List<TodoWithCategoryResponseWebModel>> getInboxTodos(
+    public ResponseEntity<List<TodoWithCategoryListItemWebModel>> getInboxTodos(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        List<TodoWithCategoryDto> todos = getInboxTodos.execute(userDetails.getUserId());
+        List<Todo> todos = getInboxTodos.execute(userDetails.getUserId());
 
-        List<TodoWithCategoryResponseWebModel> response = todos.stream()
-                .map(TodoWithCategoryResponseWebModel::from)
+        List<TodoWithCategoryListItemWebModel> response = todos.stream()
+                .map(TodoWithCategoryListItemWebModel::from)
                 .toList();
 
         return ResponseEntity.ok(response);
