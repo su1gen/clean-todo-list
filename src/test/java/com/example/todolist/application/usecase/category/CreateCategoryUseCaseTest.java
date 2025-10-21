@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.category;
 
 import com.example.todolist.application.dto.CreateCategoryDto;
 import com.example.todolist.application.outbound.category.CategoryNextIdExtractor;

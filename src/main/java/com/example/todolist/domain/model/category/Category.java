@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class Category {
     private final CategoryId id;
-    private final Title title;
+    private Title title;
     private final UserId userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime deletedAt;
@@ -116,5 +116,9 @@ public class Category {
                 ", userId=" + userId.getValue() +
                 ", deleted=" + isDeleted() +
                 '}';
+    }
+
+    public void renameTitle(Title title) {
+        this.title = title;
     }
 }

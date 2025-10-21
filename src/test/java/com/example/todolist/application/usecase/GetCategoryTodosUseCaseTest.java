@@ -4,6 +4,7 @@ import com.example.todolist.application.dto.CategoryWithTodosDto;
 import com.example.todolist.application.dto.GetCategoryTodosDto;
 import com.example.todolist.application.outbound.category.ActiveCategoryExtractor;
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
+import com.example.todolist.application.usecase.category.GetCategoryTodosUseCase;
 import com.example.todolist.domain.model.*;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;

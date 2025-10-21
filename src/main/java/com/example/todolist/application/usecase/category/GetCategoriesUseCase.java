@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.category;
 
 import com.example.todolist.application.inbound.category.GetCategories;
 import com.example.todolist.application.outbound.category.UserActiveCategoriesExtractor;

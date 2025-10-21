@@ -1,4 +1,4 @@
-package com.example.todolist.application.inbound.todo;
+package com.example.todolist.application.inbound.category;
 
 import com.example.todolist.application.dto.CategoryWithTodosDto;
 import com.example.todolist.application.dto.GetCategoryTodosDto;

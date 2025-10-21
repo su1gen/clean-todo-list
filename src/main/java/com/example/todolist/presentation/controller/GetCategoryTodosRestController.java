@@ -3,7 +3,7 @@ package com.example.todolist.presentation.controller;
 import com.example.todolist.application.dto.CategoryWithTodosDto;
 import com.example.todolist.presentation.webmodels.CategoryWithTodosResponseWebModel;
 import com.example.todolist.application.dto.GetCategoryTodosDto;
-import com.example.todolist.application.inbound.todo.GetCategoryTodos;
+import com.example.todolist.application.inbound.category.GetCategoryTodos;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
