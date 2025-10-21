@@ -13,7 +13,6 @@ import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -50,11 +49,11 @@ class CreateCategoryUseCaseTest {
     @Test
     void execute() {
         Long userId = 1L;
-        Long nextCategoryId = 100L;
+        CategoryId nextCategoryId = CategoryId.of(100L);
         User user = new User(UserId.of(userId), Email.of("test@example.com"), HashedPassword.of("qwerty"), LocalDateTime.now());
         CreateCategoryDto dto = new CreateCategoryDto("Work", userId);
         Category newCategory = new Category(
-                CategoryId.of(nextCategoryId),
+                nextCategoryId,
                 Title.of("Work"),
                 UserId.of(userId),
                 LocalDateTime.now(),
@@ -74,7 +73,7 @@ class CreateCategoryUseCaseTest {
         verify(categoryPersister, times(1)).persist(any(Category.class));
 
 
-        assertEquals(nextCategoryId, result.getId().getValue());
+        assertEquals(nextCategoryId, result.getId());
         assertEquals(dto.title(), result.getTitle().getValue());
         assertEquals(dto.userId(), result.getUserId().getValue());
         assertNotNull(result.getCreatedAt());
