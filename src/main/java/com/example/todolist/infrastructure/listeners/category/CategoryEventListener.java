@@ -1,4 +1,4 @@
-package com.example.todolist.infrastructure.listeners;
+package com.example.todolist.infrastructure.listeners.category;
 
 import com.example.todolist.domain.model.category.events.CategoryCreatedEvent;
 import org.springframework.context.event.EventListener;
