@@ -1,7 +1,7 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
 import com.example.todolist.application.outbound.user.*;
-import com.example.todolist.domain.model.User;
+import com.example.todolist.domain.model.user.User;
 import com.example.todolist.infrastructure.persistence.entity.UserEntity;
 import org.springframework.stereotype.Component;
 

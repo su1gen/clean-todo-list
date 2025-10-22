@@ -1,4 +1,4 @@
-package com.example.todolist.domain.model;
+package com.example.todolist.domain.model.todo;
 
 import java.util.Objects;
 

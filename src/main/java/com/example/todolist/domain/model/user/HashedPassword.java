@@ -1,4 +1,4 @@
-package com.example.todolist.domain.model;
+package com.example.todolist.domain.model.user;
 
 public record HashedPassword(String hash) {
 

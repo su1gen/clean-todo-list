@@ -7,7 +7,7 @@ import com.example.todolist.application.outbound.category.CategoryPersister;
 import com.example.todolist.application.outbound.user.UserByIdExtractor;
 import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.Title;
-import com.example.todolist.domain.model.UserId;
+import com.example.todolist.domain.model.user.UserId;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.events.CategoryCreatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -63,9 +63,13 @@ class CreateCategoryUseCase implements CreateCategory {
                 LocalDateTime.now(),
                 null
         );
+
+        // 3. Сохранить
+        Category newCategory = categoryPersister.persist(category);
+
         final var event = new CategoryCreatedEvent(categoryId.getValue());
         applicationEventPublisher.publishEvent(event);
-        // 3. Сохранить
-        return categoryPersister.persist(category);
+
+        return newCategory;
     }
 }

@@ -1,6 +1,6 @@
 package com.example.todolist.presentation.webmodels;
 
-import com.example.todolist.domain.model.User;
+import com.example.todolist.domain.model.user.User;
 
 /**
  * DTO для ответа после успешной аутентификации.

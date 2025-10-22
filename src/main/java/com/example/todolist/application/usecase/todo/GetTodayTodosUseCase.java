@@ -1,8 +1,8 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.todo;
 
 import com.example.todolist.application.inbound.todo.GetTodayTodos;
 import com.example.todolist.application.outbound.todo.TodayActiveTodosExtractor;
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.todo.Todo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

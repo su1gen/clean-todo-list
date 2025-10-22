@@ -1,9 +1,9 @@
 package com.example.todolist.infrastructure.persistence.entity;
 
-import com.example.todolist.domain.model.Email;
-import com.example.todolist.domain.model.HashedPassword;
-import com.example.todolist.domain.model.User;
-import com.example.todolist.domain.model.UserId;
+import com.example.todolist.domain.model.user.Email;
+import com.example.todolist.domain.model.user.HashedPassword;
+import com.example.todolist.domain.model.user.User;
+import com.example.todolist.domain.model.user.UserId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 

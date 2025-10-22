@@ -4,7 +4,7 @@ package com.example.todolist.infrastructure.persistence.entity;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.domain.model.Title;
-import com.example.todolist.domain.model.UserId;
+import com.example.todolist.domain.model.user.UserId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 

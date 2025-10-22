@@ -23,9 +23,6 @@ export default function SidebarWithoutCategory() {
       <Link href={`/without-category`} className="flex items-center w-full py-3 pr-1">
         <Folder size={20} className="text-purple-500 mr-2" />
         <span className="font-medium text-slate-700 flex-1">Без категории</span>
-        <span className="bg-purple-100 text-purple-600 px-2 py-1 rounded-full text-xs font-medium">
-          15
-        </span>
       </Link>
     </div>
 

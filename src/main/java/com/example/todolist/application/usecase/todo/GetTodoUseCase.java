@@ -1,11 +1,11 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.todo;
 
 import com.example.todolist.application.dto.GetTodoDto;
 import com.example.todolist.application.inbound.todo.GetTodo;
 import com.example.todolist.application.outbound.todo.ActiveTodoExtractor;
 import com.example.todolist.domain.exception.TodoAccessDeniedException;
 import com.example.todolist.domain.exception.TodoNotFoundException;
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.todo.Todo;
 import org.springframework.stereotype.Component;
 
 @Component

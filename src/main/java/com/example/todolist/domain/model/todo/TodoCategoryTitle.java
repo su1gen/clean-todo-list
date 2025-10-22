@@ -1,4 +1,4 @@
-package com.example.todolist.domain.model.category;
+package com.example.todolist.domain.model.todo;
 
 import jakarta.annotation.Nonnull;
 

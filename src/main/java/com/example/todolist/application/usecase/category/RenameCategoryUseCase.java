@@ -10,6 +10,7 @@ import com.example.todolist.domain.model.Title;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.domain.model.category.events.CategoryTitleRenamedEvent;
+import jakarta.transaction.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ class RenameCategoryUseCase implements RenameCategory {
     }
 
     @Override
+    @Transactional
     public void execute(RenameCategoryDto dto) {
         final var categoryId = CategoryId.of(dto.categoryId());
         final var title = Title.of(dto.title());

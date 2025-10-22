@@ -1,8 +1,9 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.todo.TodoStatus;
 import com.example.todolist.infrastructure.persistence.entity.TodoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -45,4 +46,11 @@ public interface JpaTodoRepository extends JpaRepository<TodoEntity, Long> {
 
     @Query(value = "SELECT nextval('todos_id_seq')", nativeQuery = true)
     Long getNextTodoId();
+
+    /**
+     * обновить category_title по id категории
+     */
+    @Modifying
+    @Query("UPDATE TodoEntity e SET e.categoryTitle = :newCategoryTitle WHERE e.categoryId = :categoryId")
+    void updateCategoryTitle(@Param("categoryId") Long categoryId, @Param("newCategoryTitle") String newValue);
 }

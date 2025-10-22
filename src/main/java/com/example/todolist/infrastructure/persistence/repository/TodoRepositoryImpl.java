@@ -1,8 +1,8 @@
 package com.example.todolist.infrastructure.persistence.repository;
 
 import com.example.todolist.application.outbound.todo.*;
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.todo.Todo;
+import com.example.todolist.domain.model.todo.TodoStatus;
 import com.example.todolist.infrastructure.persistence.entity.TodoEntity;
 import org.springframework.stereotype.Component;
 

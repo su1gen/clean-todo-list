@@ -1,11 +1,11 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.user;
 
 import com.example.todolist.application.inbound.user.RegisterUser;
 import com.example.todolist.application.outbound.user.UserByEmailExister;
 import com.example.todolist.application.outbound.user.UserNextIdExtractor;
 import com.example.todolist.application.outbound.user.UserPersister;
 import com.example.todolist.domain.exception.UserAlreadyExistsException;
-import com.example.todolist.domain.model.*;
+import com.example.todolist.domain.model.user.*;
 import com.example.todolist.domain.service.PasswordEncoder;
 import com.example.todolist.presentation.webmodels.RegisterWebModel;
 import org.springframework.stereotype.Component;

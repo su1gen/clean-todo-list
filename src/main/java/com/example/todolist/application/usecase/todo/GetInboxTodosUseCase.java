@@ -1,9 +1,9 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.todo;
 
 import com.example.todolist.application.inbound.todo.GetInboxTodos;
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusExtractor;
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.todo.Todo;
+import com.example.todolist.domain.model.todo.TodoStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

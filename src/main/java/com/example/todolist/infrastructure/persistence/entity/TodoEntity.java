@@ -2,7 +2,11 @@ package com.example.todolist.infrastructure.persistence.entity;
 
 import com.example.todolist.domain.model.*;
 import com.example.todolist.domain.model.category.CategoryId;
-import com.example.todolist.domain.model.category.TodoCategoryTitle;
+import com.example.todolist.domain.model.todo.Todo;
+import com.example.todolist.domain.model.todo.TodoCategoryTitle;
+import com.example.todolist.domain.model.todo.TodoId;
+import com.example.todolist.domain.model.todo.TodoStatus;
+import com.example.todolist.domain.model.user.UserId;
 import com.example.todolist.infrastructure.persistence.converter.TodoStatusConverter;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

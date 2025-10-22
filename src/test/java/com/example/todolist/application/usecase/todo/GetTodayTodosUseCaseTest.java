@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.todo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

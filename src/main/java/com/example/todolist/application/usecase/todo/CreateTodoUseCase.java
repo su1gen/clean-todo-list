@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.todo;
 
 import com.example.todolist.application.dto.CreateTodoDto;
 import com.example.todolist.application.inbound.todo.CreateTodo;
@@ -10,11 +10,13 @@ import com.example.todolist.domain.exception.UserNotFoundException;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.domain.model.Title;
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.model.category.TodoCategoryTitle;
-import com.example.todolist.domain.model.TodoId;
-import com.example.todolist.domain.model.TodoStatus;
-import com.example.todolist.domain.model.UserId;
+import com.example.todolist.domain.model.todo.Todo;
+import com.example.todolist.domain.model.todo.TodoCategoryTitle;
+import com.example.todolist.domain.model.todo.TodoId;
+import com.example.todolist.domain.model.todo.TodoStatus;
+import com.example.todolist.domain.model.todo.events.TodoCreatedEvent;
+import com.example.todolist.domain.model.user.UserId;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -35,15 +37,18 @@ class CreateTodoUseCase implements CreateTodo {
     private final UserByIdExtractor userByIdExtractor;
     private final ActiveCategoryExtractor activeCategoryExtractor;
     private final TodoPersister todoPersister;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     CreateTodoUseCase(TodoNextIdExtractor todoNextIdExtractor,
                       UserByIdExtractor userByIdExtractor,
                       ActiveCategoryExtractor activeCategoryExtractor,
-                      TodoPersister todoPersister) {
+                      TodoPersister todoPersister,
+                      ApplicationEventPublisher applicationEventPublisher) {
         this.todoNextIdExtractor = todoNextIdExtractor;
         this.userByIdExtractor = userByIdExtractor;
         this.activeCategoryExtractor = activeCategoryExtractor;
         this.todoPersister = todoPersister;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
 
@@ -78,6 +83,11 @@ class CreateTodoUseCase implements CreateTodo {
                 createTodoDto.plannedAt());
 
         // 4. Сохранить
-        return todoPersister.persist(todo);
+        Todo newTodo = todoPersister.persist(todo);
+
+        var event = new TodoCreatedEvent(todoId);
+        applicationEventPublisher.publishEvent(event);
+
+        return newTodo;
     }
 }

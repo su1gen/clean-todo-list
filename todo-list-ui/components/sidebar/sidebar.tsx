@@ -32,7 +32,6 @@ export function Sidebar() {
         >
           <Calendar size={20} className="text-red-500" />
           <span className="font-medium text-slate-700">Today</span>
-          <span className="ml-auto bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-medium">12</span>
         </Link>
 
         {/* Inbox */}
@@ -41,7 +40,6 @@ export function Sidebar() {
         >
           <Inbox size={20} className="text-blue-500" />
           <span className="font-medium text-slate-700">Inbox</span>
-          <span className="ml-auto bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium">2</span>
         </Link>
 
 

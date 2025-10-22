@@ -4,7 +4,7 @@ import com.example.todolist.application.outbound.category.UserActiveCategoriesEx
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
 import com.example.todolist.domain.model.Title;
-import com.example.todolist.domain.model.UserId;
+import com.example.todolist.domain.model.user.UserId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

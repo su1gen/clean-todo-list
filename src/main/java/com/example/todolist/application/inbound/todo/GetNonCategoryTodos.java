@@ -1,8 +1,7 @@
 package com.example.todolist.application.inbound.todo;
 
 import com.example.todolist.application.dto.GetNonCategoryTodosDto;
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
+import com.example.todolist.domain.model.todo.Todo;
 
 import java.util.List;
 

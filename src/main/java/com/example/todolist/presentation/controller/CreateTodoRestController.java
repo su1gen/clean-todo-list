@@ -2,7 +2,7 @@ package com.example.todolist.presentation.controller;
 
 
 import com.example.todolist.application.dto.CreateTodoDto;
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.todo.Todo;
 import com.example.todolist.presentation.webmodels.CreateTodoWebModel;
 import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
 import com.example.todolist.application.inbound.todo.CreateTodo;

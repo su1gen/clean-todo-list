@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase.category;
+package com.example.todolist.application.usecase.todo;
 
 import com.example.todolist.application.dto.GetCategoryTodosDto;
 import com.example.todolist.application.outbound.category.CategoryExister;
@@ -6,7 +6,11 @@ import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCate
 import com.example.todolist.domain.model.*;
 import com.example.todolist.domain.model.category.Category;
 import com.example.todolist.domain.model.category.CategoryId;
-import com.example.todolist.domain.model.category.TodoCategoryTitle;
+import com.example.todolist.domain.model.todo.Todo;
+import com.example.todolist.domain.model.todo.TodoCategoryTitle;
+import com.example.todolist.domain.model.todo.TodoId;
+import com.example.todolist.domain.model.todo.TodoStatus;
+import com.example.todolist.domain.model.user.UserId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

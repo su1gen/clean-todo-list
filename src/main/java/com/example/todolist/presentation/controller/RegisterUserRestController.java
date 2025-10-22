@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.controller;
 
 
-import com.example.todolist.domain.model.User;
+import com.example.todolist.domain.model.user.User;
 import com.example.todolist.presentation.webmodels.AuthResponseWebModel;
 import com.example.todolist.presentation.webmodels.RegisterWebModel;
 import com.example.todolist.application.inbound.user.RegisterUser;

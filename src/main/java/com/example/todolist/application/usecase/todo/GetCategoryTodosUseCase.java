@@ -1,11 +1,11 @@
-package com.example.todolist.application.usecase.category;
+package com.example.todolist.application.usecase.todo;
 
 import com.example.todolist.application.dto.GetCategoryTodosDto;
 import com.example.todolist.application.inbound.category.GetCategoryTodos;
 import com.example.todolist.application.outbound.category.CategoryExister;
 import com.example.todolist.application.outbound.todo.ActiveTodosByStatusAndCategoryExtractor;
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.todo.Todo;
+import com.example.todolist.domain.model.todo.TodoStatus;
 import com.example.todolist.domain.model.category.CategoryId;
 import org.springframework.stereotype.Component;
 

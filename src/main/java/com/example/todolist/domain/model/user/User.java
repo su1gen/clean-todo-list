@@ -1,4 +1,4 @@
-package com.example.todolist.domain.model;
+package com.example.todolist.domain.model.user;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

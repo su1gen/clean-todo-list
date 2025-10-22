@@ -1,7 +1,8 @@
-package com.example.todolist.domain.model;
+package com.example.todolist.domain.model.todo;
 
+import com.example.todolist.domain.model.Title;
+import com.example.todolist.domain.model.user.UserId;
 import com.example.todolist.domain.model.category.CategoryId;
-import com.example.todolist.domain.model.category.TodoCategoryTitle;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

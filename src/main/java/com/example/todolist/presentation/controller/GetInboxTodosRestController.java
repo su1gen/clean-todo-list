@@ -1,12 +1,9 @@
 package com.example.todolist.presentation.controller;
 
-import com.example.todolist.application.dto.TodoWithCategoryDto;
 import com.example.todolist.application.inbound.todo.GetInboxTodos;
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.todo.Todo;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
-import com.example.todolist.presentation.webmodels.TodoListItemWebModel;
 import com.example.todolist.presentation.webmodels.TodoWithCategoryListItemWebModel;
-import com.example.todolist.presentation.webmodels.TodoWithCategoryResponseWebModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

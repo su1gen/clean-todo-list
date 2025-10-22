@@ -1,7 +1,7 @@
 package com.example.todolist.application.dto;
 
-import com.example.todolist.domain.model.Todo;
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.todo.Todo;
+import com.example.todolist.domain.model.todo.TodoStatus;
 
 import java.time.LocalDateTime;
 

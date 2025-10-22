@@ -1,7 +1,7 @@
 package com.example.todolist.infrastructure.security.encoder;
 
-import com.example.todolist.domain.model.HashedPassword;
-import com.example.todolist.domain.model.Password;
+import com.example.todolist.domain.model.user.HashedPassword;
+import com.example.todolist.domain.model.user.Password;
 import com.example.todolist.domain.service.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

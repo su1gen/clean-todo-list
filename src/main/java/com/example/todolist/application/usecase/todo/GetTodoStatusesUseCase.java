@@ -1,8 +1,8 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.todo;
 
 import com.example.todolist.application.dto.TodoStatusDto;
 import com.example.todolist.application.inbound.todo.GetTodoStatuses;
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.todo.TodoStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.example.todolist.application.usecase;
+package com.example.todolist.application.usecase.user;
 
 import com.example.todolist.presentation.webmodels.LoginWebModel;
 import com.example.todolist.application.dto.TokenDto;

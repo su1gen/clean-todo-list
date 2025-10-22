@@ -1,6 +1,6 @@
 package com.example.todolist.presentation.webmodels;
 
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.todo.Todo;
 
 public record TodoListItemWebModel(
         Long id,

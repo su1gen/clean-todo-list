@@ -1,6 +1,6 @@
 package com.example.todolist.infrastructure.persistence.converter;
 
-import com.example.todolist.domain.model.TodoStatus;
+import com.example.todolist.domain.model.todo.TodoStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

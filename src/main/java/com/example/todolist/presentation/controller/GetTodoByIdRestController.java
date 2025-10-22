@@ -2,7 +2,7 @@ package com.example.todolist.presentation.controller;
 
 import com.example.todolist.application.dto.GetTodoDto;
 import com.example.todolist.application.inbound.todo.GetTodo;
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.todo.Todo;
 import com.example.todolist.infrastructure.security.userdetails.CustomUserDetails;
 import com.example.todolist.presentation.webmodels.TodoResponseWebModel;
 import org.springframework.http.ResponseEntity;

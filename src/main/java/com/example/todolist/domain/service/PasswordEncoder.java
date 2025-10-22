@@ -1,7 +1,7 @@
 package com.example.todolist.domain.service;
 
-import com.example.todolist.domain.model.HashedPassword;
-import com.example.todolist.domain.model.Password;
+import com.example.todolist.domain.model.user.HashedPassword;
+import com.example.todolist.domain.model.user.Password;
 
 /**
  * Порт для шифрования паролей.

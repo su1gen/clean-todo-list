@@ -1,6 +1,6 @@
 package com.example.todolist.application.outbound.todo;
 
-import com.example.todolist.domain.model.Todo;
+import com.example.todolist.domain.model.todo.Todo;
 
 import java.util.List;
 
